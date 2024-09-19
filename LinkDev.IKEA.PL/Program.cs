@@ -6,11 +6,15 @@ namespace LinkDev.IKEA.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            #region Configure Services
+            // Register Services to the dependency injection container.
+            // Add services to the container. 
             builder.Services.AddControllersWithViews();
+            #endregion
 
             var app = builder.Build();
 
+            #region Configure Kestrel Middlewares
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -22,13 +26,15 @@ namespace LinkDev.IKEA.PL
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // check the path follows which controller and action in the application
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}"); 
+            #endregion
 
             app.Run();
         }
