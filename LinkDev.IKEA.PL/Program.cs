@@ -1,3 +1,6 @@
+using LinkDev.IKEA.DAL.Persistance.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace LinkDev.IKEA.PL
 {
     public class Program
@@ -10,6 +13,25 @@ namespace LinkDev.IKEA.PL
             // Register Services to the dependency injection container.
             // Add services to the container. 
             builder.Services.AddControllersWithViews();
+
+            //builder.Services.AddScoped<ApplicationDbContext>();
+            //IServiceCollection serviceCollection = builder.Services.AddScoped<DbContextOptions<ApplicationDbContext>>((ServiceProvider) =>
+            //{
+            //    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            //    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+            //    var options = optionsBuilder.Options;
+
+            //    return options;
+            //});
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                
+            });
+
+
             #endregion
 
             var app = builder.Build();
