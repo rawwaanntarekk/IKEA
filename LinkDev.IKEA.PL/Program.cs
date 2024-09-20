@@ -33,8 +33,9 @@ namespace LinkDev.IKEA.PL
                 
             });
 
-            builder.Services.AddScoped<IDepartmentRepository, IDepartmentRepository>();
-            builder.Services.AddScoped<IDepartmentService, IDepartmentService>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 
             #endregion

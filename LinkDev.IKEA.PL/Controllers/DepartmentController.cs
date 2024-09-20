@@ -7,8 +7,10 @@ namespace LinkDev.IKEA.PL.Controllers
     // DepartmentController has a IDepartmentService [Composition]
     public class DepartmentController(IDepartmentService departmentService) : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
+            var departments = departmentService.GetAllDepartments();
             return View();
         }
     }

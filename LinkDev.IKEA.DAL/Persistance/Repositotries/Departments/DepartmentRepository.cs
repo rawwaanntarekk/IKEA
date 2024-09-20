@@ -8,7 +8,7 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries.Departments
     // Primary Constructor
     // Asking CLR for object of ApplicationDbContext Implicitly
     // Will be avaailble upon the object
-    internal class DepartmentRepository(ApplicationDbContext dbContext) : IDepartmentRepository
+    public class DepartmentRepository(ApplicationDbContext dbContext) : IDepartmentRepository
     {
         public IEnumerable<Department> GetAll(bool withAsNoTracking = true)
         {
