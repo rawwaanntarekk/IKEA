@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LinkDev.IKEA.DAL.Models.Department
 {
     // This is the data the will be in the database table.
-    internal class Department : ModelBase
+    public class Department : ModelBase
     {
         public string Code { get; set; } = null!;
         public string Name { get; set; } = null!;
