@@ -1,11 +1,7 @@
 ﻿using LinkDev.IKEA.DAL.Models.Department;
 using LinkDev.IKEA.DAL.Persistance.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LinkDev.IKEA.DAL.Persistance.Repositotries.Departments
 {
@@ -26,6 +22,11 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries.Departments
         {
            var department = dbContext.Departments.Find(id);
            return department;
+        }
+
+        public IQueryable<Department> GetAllAsIQueryable()
+        {
+            return dbContext.Departments;
         }
 
         public int Add(Department entity)
