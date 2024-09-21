@@ -15,6 +15,6 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
         public IQueryable<T> GetAllAsIQueryable();
         public int Add(T entity);
         public int Update(T entity);
-        public int Delete(int id);
+        public int Delete(T entity);
     }
 }
