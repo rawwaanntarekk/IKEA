@@ -139,5 +139,59 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         }
+
+
+        #region Delete Action
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id is null)
+                return BadRequest();
+
+            var department = departmentService.GetDepartmentByID(id.Value);
+
+            if (department is null)
+                return NotFound();
+
+            return View(department);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var message = string.Empty;
+            try
+            {
+                var deleted = departmentService.deleteDepartment(id);
+
+                if (deleted)
+                    return RedirectToAction(nameof(Index));
+
+                message = "an error has occured during deleting the department :(";
+            }
+            catch (Exception ex)
+            {
+
+                // 1. Log Exception
+                logger.LogError(ex, ex.Message);
+
+                // 2. Set Message
+                message = env.IsDevelopment() ? ex.Message : "Department is not created :(";
+
+            }
+
+            //ModelState.AddModelError(string.Empty, message);
+            return RedirectToAction(nameof(Index));
+
+            #endregion
+
+
+
+
+
+
+
+        }
     }
 }
