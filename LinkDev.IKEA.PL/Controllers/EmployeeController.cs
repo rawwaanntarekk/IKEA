@@ -1,7 +1,9 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Employees;
+using LinkDev.IKEA.DAL.Models.Common.Enums;
 using LinkDev.IKEA.PL.ViewModels.Departments;
+using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
@@ -74,64 +76,84 @@ namespace LinkDev.IKEA.PL.Controllers
             return NotFound();
         }
 
-        //[HttpGet]
-        //public IActionResult Update(int? id)
-        //{
-        //    if (id is null)
-        //        return BadRequest();
+        [HttpGet]
+        public IActionResult Update(int? id)
+        {
+            if (id is null)
+                return BadRequest();
 
-        //    var department = employeeService.GetEmployee(id.Value);
+            var employee = employeeService.GetEmployee(id.Value);
 
-        //    if (department is { })
-        //        return View(new DepartmentUpdateViewModel()
-        //        {
-                   
-        //        });
-
-        //    return NotFound();
-
-        //}
-
-        //[HttpPost]
-        //public IActionResult Update([FromRoute] int id, DepartmentUpdateViewModel departmentVM)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return View(departmentVM);
-
-        //    var message = string.Empty;
-
-        //    try
-        //    {
-        //        var employee = new UpdatedEmployeeDTO()
-        //        {
+            if (employee is { })
+                return View(new EmployeeUpdateVM
+                {
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Email = employee.Email,
+                    Phone = employee.Phone,
+                    Address = employee.Address,
+                    Salary = employee.Salary,
+                    IsActive = employee.IsActive,
+                    HiringDate = employee.HiringDate,
                   
 
-        //        };
 
-        //        var result = employeeService.UpdateEmployee(employee);
+                }
+               );
 
-        //        if (result > 0)
-        //            return RedirectToAction(nameof(Index));
+            return NotFound();
 
-        //        message = "Failed to update department";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // 1. Log Exception
-        //        logger.LogError(ex, ex.Message);
+        }
 
-        //        // 2. Set Message
-        //        message = env.IsDevelopment() ? ex.Message : "Department is not updated :(";
+        [HttpPost]
+        public IActionResult Update([FromRoute] int id, EmployeeUpdateVM employeeUpdateVM)
+        {
+            if (!ModelState.IsValid)
+                return View(employeeUpdateVM);
 
-        //    }
+            var message = string.Empty;
 
-        //    ModelState.AddModelError("", message);
-        //    return View(departmentVM);
+            try
+            {
+                var employee = new UpdatedEmployeeDTO()
+                {
+                    Id = id,
+                    Name = employeeUpdateVM.Name,
+                    Age = employeeUpdateVM.Age,
+                    Email = employeeUpdateVM.Email,
+                    Phone = employeeUpdateVM.Phone,
+                    Address = employeeUpdateVM.Address,
+                    Salary = employeeUpdateVM.Salary,
+                    IsActive = employeeUpdateVM.IsActive,
+                    HiringDate = employeeUpdateVM.HiringDate,
+
+
+                };
+
+                var result = employeeService.UpdateEmployee(id, employee);
+
+                if (result > 0)
+                    return RedirectToAction(nameof(Index));
+
+                message = "Failed to update department";
+            }
+            catch (Exception ex)
+            {
+                // 1. Log Exception
+                logger.LogError(ex, ex.Message);
+
+                // 2. Set Message
+                message = env.IsDevelopment() ? ex.Message : "Department is not updated :(";
+
+            }
+
+            ModelState.AddModelError("", message);
+            return View(employeeUpdateVM);
 
 
 
 
-        //}
+        }
 
 
         #region Delete Action

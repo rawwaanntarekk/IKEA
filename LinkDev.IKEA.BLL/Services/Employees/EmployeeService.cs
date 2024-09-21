@@ -67,6 +67,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 {
                     Id = employee.Id,
                     Name = employee.Name,
+                    Address = employee.Address,
                     Age = employee.Age,
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
