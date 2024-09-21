@@ -74,7 +74,7 @@
             <div class="form-group col-md-8 mb-3">
                 <label asp-for="EmployeeType" class="form-label"></label>
                 <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmpType>()" class="form-control">
-                    <option value="">Select Employee Type</option>
+                    <option value="@null">Select Employee Type</option>
                 </select>
                 <span asp-validation-for="EmployeeType" class="text-danger"></span>
             </div>

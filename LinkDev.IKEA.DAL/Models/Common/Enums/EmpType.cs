@@ -8,7 +8,8 @@ namespace LinkDev.IKEA.DAL.Models.Common.Enums
 {
     public enum EmpType
     {
-        FullTime,
-        PartTime
+        FullTime = 1,
+        PartTime = 2,
+        Intern = 3
     }
 }
