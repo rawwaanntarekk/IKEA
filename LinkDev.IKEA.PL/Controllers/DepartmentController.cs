@@ -1,5 +1,7 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Services.Departments;
+using LinkDev.IKEA.DAL.Models.Department;
+using LinkDev.IKEA.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
@@ -16,7 +18,6 @@ namespace LinkDev.IKEA.PL.Controllers
             var departments = departmentService.GetAllDepartments();
             return View(departments);
         }
-
 
         [HttpGet]
         public IActionResult Create()
@@ -53,25 +54,13 @@ namespace LinkDev.IKEA.PL.Controllers
                 logger.LogError(ex,ex.Message);
 
                 // 2. Set Message
+                message = env.IsDevelopment() ? ex.Message : "Department is not created :(";
 
-                if (env.IsDevelopment())
-                {
-                     message = ex.Message;
-                    return View(department);
-
-                }
-                else
-                {
-                    message = "Department is not created :(";
-                    return View("ErrorPage", message);
-
-                }
-
-               
 
             }
+            ModelState.AddModelError("", message);
+            return View(department);
         }
-
 
         [HttpGet]
         public IActionResult Details(int? id)
@@ -85,5 +74,70 @@ namespace LinkDev.IKEA.PL.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        public IActionResult Update(int? id)
+        {
+            if (id is null)
+                return BadRequest();
+
+            var department = departmentService.GetDepartmentByID(id.Value);
+
+            if(department is { })
+                return View(new DepartmentUpdateViewModel()
+                {
+                    Code = department.Code,
+                    Name = department.Name,
+                    Description = department.Description,
+                    CreationDate = department.CreationDate
+                });
+
+            return NotFound();
+
+        }
+
+        [HttpPost]
+        public IActionResult Update([FromRoute] int id, DepartmentUpdateViewModel departmentVM)
+        {
+            if (!ModelState.IsValid)
+                return View(departmentVM);
+
+            var message = string.Empty;
+
+            try
+            {
+                var departmentToUpdate = new UpdatedDepartmentDTO()
+                {
+                    Id = id,
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+                   
+                };
+
+                var result = departmentService.UpdateDepartment(departmentToUpdate);
+
+                if (result > 0)
+                    return RedirectToAction(nameof(Index));
+
+                message = "Failed to update department";
+            }
+            catch (Exception ex)
+            {  
+                // 1. Log Exception
+                logger.LogError(ex, ex.Message);
+
+                // 2. Set Message
+                message = env.IsDevelopment() ? ex.Message : "Department is not updated :(";
+
+            }
+
+            ModelState.AddModelError("", message);
+            return View(departmentVM);
+
+
+
+
+        }
     }
 }

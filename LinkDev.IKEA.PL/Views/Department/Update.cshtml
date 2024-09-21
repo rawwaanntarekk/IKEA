@@ -1,13 +1,13 @@
-﻿@model CreatedDepartmentDTO
+﻿@model DepartmentUpdateViewModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Update";
 }
 
-<h1 class="mb-3 text-center">Create New Department</h1>
+<h1 class="mb-3 text-center">Update Department</h1>
 <div class="w-100 mb-5"></div>
 
 <div class="container">
-   <form asp-action="Create" >
+   <form asp-action="Update" >
        <div asp-validation-summary="ModelOnly"></div>
        <div class="row justify-content-center">
            <div class="form-floating mb-3 col-md-8">
@@ -32,8 +32,10 @@
            <div class="w-100"></div> 
            <div class="col-md-8 text-end">
                <button type="submit" class="btn btn-success text-light ms-auto">Save</button>
-               <a asp-action="Index" class="btn btn-dark text-light">Back To List</a>
+               <a asp-action="Index" class="btn btn-dark text-light">Cancel</a>
            </div>
        </div>
    </form>
 </div>
+
+

@@ -60,12 +60,13 @@ namespace LinkDev.IKEA.BLL.Services.Departments
         {
           var dept = new Department
             {
+              Id = department.Id,
               Code = department.Code,
               Name = department.Name,
               Description = department.Description,
               CreationDate = department.CreationDate,
               LastModifiedBy = 1,
-              LastModifiedOn = DateTime.UtcNow,
+              LastModifiedOn = DateTime.UtcNow
 
           };
 
