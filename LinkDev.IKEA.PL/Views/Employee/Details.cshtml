@@ -1,0 +1,113 @@
+﻿@model EmployeeDetailsDTO
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>@Model.Name Details</h1>
+
+@* Bootstrab Tabs *@
+<ul class="nav nav-tabs mt-2" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General Information</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab" aria-controls="admin" aria-selected="false">Administration Informaiton</button>
+  </li>
+</ul>
+
+
+
+
+<div class="tab-content" id="myTabContent">
+    @*     Genral Tab Content *@ 
+         <div class="row g-3 justify-content-center">
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Name" class="form-control" placeholder="Name" readonly>
+                <label asp-for="Name" class="formInput ms-2"></label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Email" class="form-control" placeholder="Email" readonly>
+                <label asp-for="Email" class="formInput ms-2"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Address" class="form-control" placeholder="Address" readonly>
+                <label asp-for="Address" class="formInput ms-2"></label>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Age" class="form-control" placeholder="Age" readonly>
+                <label asp-for="Age" class="formInput ms-2"></label>
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Salary" class="form-control" placeholder="Salary" readonly>
+                <label asp-for="Salary" class="formInput ms-2"></label>
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input type="date" asp-for="HiringDate" class="form-control" placeholder="Hiring Date" readonly>
+                <label asp-for="HiringDate" class="formInput ms-2"></label>
+                <span asp-validation-for="HiringDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="IsActive" class="form-check-input" placeholder="Is Active" readonly>
+                <label asp-for="IsActive" class="form-check-label ms-2"></label>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+
+            <div class="form-check">
+                 <input asp-for="Gender" class="form-check-input" placeholder="Gender" readonly>
+                <label asp-for="Gender" class="form-check-label ms-2"></label>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+            <div class="form-check">
+                 <input asp-for="EmployeeType" class="form-control" placeholder="Employee Type" readonly>
+                <label asp-for="EmployeeType" class="formInput ms-2"></label>
+                <span asp-validation-for="EmployeeType" class="text-danger"></span>
+            </div>
+  </div>
+
+    @*     Admin Tab Content *@
+  <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="profile-tab">
+
+
+        <div class="form-groupcol-12 mt-3">
+             <label asp-for="CreatedOn" class="formInput"></label>
+             <input asp-for="CreatedOn" class="form-control" readonly>
+         </div>
+
+         <div class="form-group col-12 mt-3">
+                    <label asp-for="CreatedBy" class="formInput"></label>
+                    <input asp-for="CreatedBy" class="form-control" readonly>
+        </div>
+
+        <div class="form-group col-12 mt-3">
+            <label asp-for="LastModifiedOn" class="formInput"></label>
+            <input asp-for="LastModifiedOn" class="form-control" readonly>
+        </div>
+
+        <div class="form-group col-12 mt-3">
+            <label asp-for="LastModifiedBy" class="formInput"></label>
+            <input asp-for="LastModifiedBy" class="form-control" readonly>
+        </div>
+
+
+  </div>
+
+  <div class="mt-4 text-end">
+      <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+      <a asp-action="Index" class="btn btn-dark">Back To List</a>
+  </div>
+
+    
+</div>
+

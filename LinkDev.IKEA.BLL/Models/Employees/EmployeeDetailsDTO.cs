@@ -38,5 +38,10 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 
         [Display(Name = "Employee Type")]
         public string EmployeeType { get; set; } = null!;
+
+        public int CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public int LastModifiedBy { get; set; }
+        public DateTime LastModifiedOn { get; set; }
     }
 }
