@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.IKEA.DAL.Models.Department
+namespace LinkDev.IKEA.BLL.Models
 {
-    // This is the data the will be in the database table.
-    public class Department : ModelBase
+    public record DepartmentGeneralDTO
     {
+        public int Id { get; set; }
         public string Code { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-
-        // The date the deprtment created in the company.
+        [Display(Name = "Creation Date")]
         public DateOnly CreationDate { get; set; }
 
     }

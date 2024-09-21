@@ -24,6 +24,6 @@ namespace LinkDev.IKEA.DAL.Persistance.Data
         }
 
 
-        DbSet<Department> Departments { get; set; } = null!;
+        public DbSet<Department> Departments { get; set; } = null!;
     }
 }
