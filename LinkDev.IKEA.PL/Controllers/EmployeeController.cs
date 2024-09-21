@@ -68,9 +68,9 @@ namespace LinkDev.IKEA.PL.Controllers
             if (id is null)
                 return BadRequest();
 
-            var department = employeeService.GetEmployee(id.Value);
-            if (department is { })
-                return View(department);
+            var employee = employeeService.GetEmployee(id.Value);
+            if (employee is { })
+                return View(employee);
             return NotFound();
         }
 
@@ -141,12 +141,12 @@ namespace LinkDev.IKEA.PL.Controllers
             if (id is null)
                 return BadRequest();
 
-            var department = employeeService.GetEmployee(id.Value);
+            var employee = employeeService.GetEmployee(id.Value);
 
-            if (department is null)
+            if (employee is null)
                 return NotFound();
 
-            return View(department);
+            return View(employee);
         }
 
 
@@ -161,7 +161,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 if (deleted)
                     return RedirectToAction(nameof(Index));
 
-                message = "an error has occured during deleting the department :(";
+                message = "an error has occured during deleting the employee :(";
             }
             catch (Exception ex)
             {
@@ -170,7 +170,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 logger.LogError(ex, ex.Message);
 
                 // 2. Set Message
-                message = env.IsDevelopment() ? ex.Message : "Department is not created :(";
+                message = env.IsDevelopment() ? ex.Message : "Employee is not created :(";
 
             }
 
