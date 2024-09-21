@@ -17,6 +17,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
             var CreatedEmployee = new Employee
             {
                 Name = employee.Name,
+                Address = employee.Address,
                 Age = employee.Age,
                 Salary = employee.Salary,
                 IsActive = employee.IsActive,
