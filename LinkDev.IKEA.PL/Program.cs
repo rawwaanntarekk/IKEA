@@ -1,3 +1,6 @@
+using LinkDev.IKEA.DAL.Persistance.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace LinkDev.IKEA.PL
 {
     public class Program
@@ -6,11 +9,34 @@ namespace LinkDev.IKEA.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            #region Configure Services
+            // Register Services to the dependency injection container.
+            // Add services to the container. 
             builder.Services.AddControllersWithViews();
+
+            //builder.Services.AddScoped<ApplicationDbContext>();
+            //IServiceCollection serviceCollection = builder.Services.AddScoped<DbContextOptions<ApplicationDbContext>>((ServiceProvider) =>
+            //{
+            //    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            //    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+            //    var options = optionsBuilder.Options;
+
+            //    return options;
+            //});
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                
+            });
+
+
+            #endregion
 
             var app = builder.Build();
 
+            #region Configure Kestrel Middlewares
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -22,13 +48,15 @@ namespace LinkDev.IKEA.PL
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // check the path follows which controller and action in the application
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}"); 
+            #endregion
 
             app.Run();
         }
