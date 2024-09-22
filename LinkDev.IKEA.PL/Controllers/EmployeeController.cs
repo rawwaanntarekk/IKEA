@@ -28,24 +28,37 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedEmployeeDTO employee)
+        public IActionResult Create(EmployeeViewModel employeeVM)
         {
             if (!ModelState.IsValid)
-                return View(employee);
+                return View(employeeVM);
 
             var message = string.Empty;
 
 
             try
             {
-                var result = employeeService.CreateEmployee(employee);
+                var CreatedEmployee = new CreatedEmployeeDTO()
+                {
+                    Name = employeeVM.Name,
+                    Age = employeeVM.Age,
+                    Email = employeeVM.Email,
+                    Phone = employeeVM.Phone,
+                    Address = employeeVM.Address,
+                    Salary = employeeVM.Salary,
+                    IsActive = employeeVM.IsActive,
+                    HiringDate = employeeVM.HiringDate,
+                    Gender = employeeVM.Gender,
+                    EmployeeType = employeeVM.EmployeeType
+                };
+                var result = employeeService.CreateEmployee(CreatedEmployee);
                 if (result > 0)
                     return RedirectToAction("Index");
                 else
                 {
                     message = "Failed to add new employee";
                     ModelState.AddModelError("", message);
-                    return View(employee);
+                    return View(employeeVM);
                 }
             }
             catch (Exception ex)
@@ -60,7 +73,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
             ModelState.AddModelError("", message);
-            return View(employee);
+            return View(employeeVM);
         }
 
         
@@ -77,16 +90,21 @@ namespace LinkDev.IKEA.PL.Controllers
             return NotFound();
         }
 
+
+
         [HttpGet]
         public IActionResult Update(int? id)
         {
             if (id is null)
                 return BadRequest();
 
+
+
             var employee = employeeService.GetEmployee(id.Value);
 
+
             if (employee is { })
-                return View(new EmployeeUpdateVM
+                return View(new EmployeeViewModel
                 {
                     Name = employee.Name,
                     Age = employee.Age,
@@ -96,8 +114,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
-                  
-
+                    //Gender = (Gender) Enum.Parse(typeof(Gender) , employee.Gender),
+                    //EmployeeType = (EmpType) Enum.Parse(typeof(EmpType) , employee.EmployeeType)
 
                 }
                );
@@ -108,7 +126,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id, EmployeeUpdateVM employeeUpdateVM)
+        public IActionResult Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
         {
             if (!ModelState.IsValid)
                 return View(employeeUpdateVM);
@@ -128,6 +146,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employeeUpdateVM.Salary,
                     IsActive = employeeUpdateVM.IsActive,
                     HiringDate = employeeUpdateVM.HiringDate,
+                    Gender = employeeUpdateVM.Gender,
+                    EmployeeType = employeeUpdateVM.EmployeeType
 
 
                 };

@@ -28,24 +28,34 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedDepartmentDTO department)
+        public IActionResult Create(DepartmentViewModel departmentVM)
         {
            if(!ModelState.IsValid)
-                return View(department);
+                return View(departmentVM);
 
            var message = string.Empty;
 
 
             try
             {
-                var result = departmentService.CreateDepartment(department);
+                var createdDepartment = new CreatedDepartmentDTO()
+                {
+                  
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+
+                };
+
+                var result = departmentService.CreateDepartment(createdDepartment);
                 if (result > 0)
                     return RedirectToAction("Index");
                 else
                 {
                     message = "Failed to create department";
                     ModelState.AddModelError("", message);
-                    return View(department);
+                    return View(departmentVM);
                 }
             }
             catch (Exception ex)
@@ -60,7 +70,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
             ModelState.AddModelError("", message);
-            return View(department);
+            return View(departmentVM);
         }
 
         [HttpGet]
@@ -84,7 +94,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var department = departmentService.GetDepartmentByID(id.Value);
 
             if(department is { })
-                return View(new DepartmentUpdateViewModel()
+                return View(new DepartmentViewModel()
                 {
                     Code = department.Code,
                     Name = department.Name,
@@ -98,7 +108,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id, DepartmentUpdateViewModel departmentVM)
+        public IActionResult Update([FromRoute] int id, DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
