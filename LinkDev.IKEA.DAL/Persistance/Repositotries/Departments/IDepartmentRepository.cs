@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA.DAL.Models.Department;
+﻿using LinkDev.IKEA.DAL.Models.Departments;
 
 
 namespace LinkDev.IKEA.DAL.Persistance.Repositotries.Departments

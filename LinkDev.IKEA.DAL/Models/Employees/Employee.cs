@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 using LinkDev.IKEA.DAL.Models.Common.Enums;
+using LinkDev.IKEA.DAL.Models.Departments;
 
 namespace LinkDev.IKEA.DAL.Models.Employees
 {
@@ -18,5 +19,10 @@ namespace LinkDev.IKEA.DAL.Models.Employees
         public DateOnly HiringDate { get; set; }
         public Gender Gender  { get; set; }
         public EmpType EmployeeType { get; set; }
+
+        public int? DepartmentId { get; set; }
+
+        // Navigational Property One
+        public virtual Department? Department { get; set; }
     }
 }

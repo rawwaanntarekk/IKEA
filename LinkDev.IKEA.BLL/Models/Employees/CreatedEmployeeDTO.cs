@@ -43,5 +43,8 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         [Display(Name = "Employee Type")]
         [Required(ErrorMessage = "You must choose a type")]
         public EmpType? EmployeeType { get; set; }
+
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; }
     }
 }

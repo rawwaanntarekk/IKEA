@@ -1,5 +1,6 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Models.Common.Enums;
 using LinkDev.IKEA.PL.ViewModels.Departments;
@@ -32,13 +33,12 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel employeeVM)
+        public IActionResult Create(EmployeeViewModel employeeVM )
         {
             if (!ModelState.IsValid)
                 return View(employeeVM);
@@ -59,7 +59,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     IsActive = employeeVM.IsActive,
                     HiringDate = employeeVM.HiringDate,
                     Gender = employeeVM.Gender,
-                    EmployeeType = employeeVM.EmployeeType
+                    EmployeeType = employeeVM.EmployeeType,
+                    DepartmentId = employeeVM.DepartmentId
                 };
                 var result = employeeService.CreateEmployee(CreatedEmployee);
 
@@ -114,7 +115,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Update(int? id)
+        public IActionResult Update(int? id )
         {
             if (id is null)
                 return BadRequest();
@@ -122,7 +123,6 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
             var employee = employeeService.GetEmployee(id.Value);
-
 
             if (employee is { })
                 return View(new EmployeeViewModel
@@ -168,7 +168,7 @@ namespace LinkDev.IKEA.PL.Controllers
                     IsActive = employeeUpdateVM.IsActive,
                     HiringDate = employeeUpdateVM.HiringDate,
                     Gender = employeeUpdateVM.Gender,
-                    EmployeeType = employeeUpdateVM.EmployeeType
+                    EmployeeType = employeeUpdateVM.EmployeeType,
 
 
                 };

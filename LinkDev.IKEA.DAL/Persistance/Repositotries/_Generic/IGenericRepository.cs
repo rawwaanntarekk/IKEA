@@ -1,5 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Models;
-using LinkDev.IKEA.DAL.Models.Department;
+using LinkDev.IKEA.DAL.Models.Departments;
 using System;
 using System.Collections.Generic;
 using System.Linq;

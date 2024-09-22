@@ -34,6 +34,9 @@ namespace LinkDev.IKEA.PL.ViewModels.Employees
         [Display(Name = "Employee Type")]
         public EmpType EmployeeType { get; set; }
 
+        [Display(Name = "Department")]
+        public int DepartmentId { get; set; }
+
 
     }
 }
