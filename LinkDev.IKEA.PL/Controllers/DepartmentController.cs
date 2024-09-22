@@ -50,9 +50,15 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 var result = departmentService.CreateDepartment(createdDepartment);
                 if (result > 0)
+                {
+                    TempData["Message"] = "Department is created successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction("Index");
+                }
                 else
                 {
+                    TempData["Message"] = "Failed to create department";
+                    TempData["Success"] = false;
                     message = "Failed to create department";
                     ModelState.AddModelError("", message);
                     return View(departmentVM);
@@ -130,8 +136,15 @@ namespace LinkDev.IKEA.PL.Controllers
                 var result = departmentService.UpdateDepartment(departmentToUpdate);
 
                 if (result > 0)
-                    return RedirectToAction(nameof(Index));
+                {
 
+                    TempData["Message"] = "Department is updated successfully";
+                    TempData["Success"] = true;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                TempData["Message"] = "Failed to update department";
+                TempData["Success"] = false;
                 message = "Failed to update department";
             }
             catch (Exception ex)
@@ -179,8 +192,14 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = departmentService.deleteDepartment(id);
 
                 if (deleted)
+                {
+                    TempData["Message"] = "Department is deleted successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
+                }
 
+                TempData["Message"] = "department is not deleted :(";
+                TempData["Success"] = false;
                 message = "an error has occured during deleting the department :(";
             }
             catch (Exception ex)

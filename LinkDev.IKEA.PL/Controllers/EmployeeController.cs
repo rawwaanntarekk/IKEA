@@ -62,10 +62,21 @@ namespace LinkDev.IKEA.PL.Controllers
                     EmployeeType = employeeVM.EmployeeType
                 };
                 var result = employeeService.CreateEmployee(CreatedEmployee);
+
+                // 3. TempData : is a Property of type dictionary Object (Introduced in ASP.NET Framework 3.5)
+                // Helps to pass data netweem 2 consecutive requests
+
+
                 if (result > 0)
+                {
+                    TempData["Message"] = "Employee is added successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction("Index");
+                }
                 else
                 {
+                    TempData["Message"] = "Failed to add new employee";
+                    TempData["Success"] = false;
                     message = "Failed to add new employee";
                     ModelState.AddModelError("", message);
                     return View(employeeVM);
@@ -165,8 +176,14 @@ namespace LinkDev.IKEA.PL.Controllers
                 var result = employeeService.UpdateEmployee(id, employee);
 
                 if (result > 0)
+                {
+                    TempData["Message"] = "Employee is updated successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
+                }
 
+                TempData["Message"] = "Failed to update employee";
+                TempData["Success"] = false;
                 message = "Failed to update department";
             }
             catch (Exception ex)
@@ -214,8 +231,16 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = employeeService.DeleteEmployee(id);
 
                 if (deleted)
+                {
+                    TempData["Message"] = "Employee is deleted successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
 
+
+                }
+
+                TempData["Message"] = "Failed to delete employee";
+                TempData["Success"] = false;
                 message = "an error has occured during deleting the employee :(";
             }
             catch (Exception ex)

@@ -9,12 +9,7 @@
     string? tempDataMessage = ViewBag.Message ;
 }
 
-<div class="alert alert-primary">
-    <p> @ViewData["Message"] </p>
-</div>
-<div class="alert alert-primary">
-    <p> @ViewData["Message"] </p>
-</div>
+<partial name="_ToastPartial" />
 
 
 <div class="container">
@@ -57,24 +52,8 @@
                             <td>@Html.DisplayFor(X => employee.Gender)</td>
                             <td>@Html.DisplayFor(X => employee.EmployeeType)</td>
 
-
-
                             
-                            <td>
-                                <a asp-controller="Employee" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-dark">
-                                        <i class="fa-solid fa-eye me-2"></i> Details
-                                    </a>
-                            </td>
-                            <td>
-                                    <a asp-controller="Employee" asp-action="Update" asp-route-id="@employee.Id" class="btn btn-dark">
-                                    <i class="fa-solid fa-pen-to-square me-2"></i>Update
-                                </a>
-                            </td>
-                            <td>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                          <i class="fa-solid fa-trash me-2"></i>Delete
-                                        </button>
-                            </td>
+                                   <partial name="_ButtonsPartial" model="@employee.Id"/>
                         </tr>
 
                         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
