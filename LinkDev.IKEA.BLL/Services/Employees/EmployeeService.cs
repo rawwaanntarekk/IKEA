@@ -47,17 +47,22 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
         public IEnumerable<EmployeeGeneralDTO> GetAllEmployees()
         {
-            return employeeRepository.GetAllAsIQueryable().Where(e => !e.IsDeleted).Select(e => new EmployeeGeneralDTO
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Age = e.Age,
-                Salary = e.Salary,
-                IsActive = e.IsActive,
-                Email = e.Email,
-                Gender = e.Gender.ToString(),
-                EmployeeType = e.EmployeeType.ToString(),
-            }).AsNoTracking().ToList();
+            var employee = employeeRepository
+                .GetIEnumerable()
+                .Where(e => !e.IsDeleted)
+                .Select(e => new EmployeeGeneralDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Age = e.Age,
+                    Salary = e.Salary,
+                    IsActive = e.IsActive,
+                    Email = e.Email,
+                    Gender = e.Gender.ToString(),
+                    EmployeeType = e.EmployeeType.ToString(),
+                }).ToList();
+            return employee;
+
         }
 
         public EmployeeDetailsDTO? GetEmployee(int id)
