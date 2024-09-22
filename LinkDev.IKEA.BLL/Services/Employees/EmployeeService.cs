@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.DAL.Models.Common.Enums;
 using LinkDev.IKEA.DAL.Models.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +20,13 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 Name = employee.Name,
                 Address = employee.Address,
                 Age = employee.Age,
-                Salary = employee.Salary,
+                Salary =(decimal) employee.Salary!,
                 IsActive = employee.IsActive,
                 Email = employee.Email!,
                 PhoneNumber = employee.Phone!,
-                HiringDate = employee.HiringDate,
-                Gender = employee.Gender,
-                EmployeeType = employee.EmployeeType,
+                HiringDate = (DateOnly)employee.HiringDate!,
+                Gender = (Gender) employee.Gender!,
+                EmployeeType = (EmpType) employee.EmployeeType!,
                 CreatedBy = 1,
                 CreatedOn = DateTime.UtcNow,
                 LastModifiedBy = 1,
