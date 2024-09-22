@@ -15,6 +15,16 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
+            // Helps to pass data from Controller [Action] to View
+            ViewData["Message"] = "Hello ViweData";
+
+            // ViewBag is a Dynamic Property (Introduced in ASP.NET Framework 4.0)
+            // Helps to pass data from Controller [Action] to View
+
+            ViewBag.Message = "Hello ViewBag";
+
+
             var employees = employeeService.GetAllEmployees();
             return View(employees);
         }

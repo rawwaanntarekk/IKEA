@@ -2,7 +2,21 @@
 
 @{
     ViewData["Title"] = "Employees";
+
+    // Compiler Enforce type safety
+    string? viewDataMessage = ViewData["Message"] as string;
+    // Compiler will skip type checking and will not enforce type safety
+    string? tempDataMessage = ViewBag.Message ;
 }
+
+<div class="alert alert-primary">
+    <p> @ViewData["Message"] </p>
+</div>
+<div class="alert alert-primary">
+    <p> @ViewData["Message"] </p>
+</div>
+
+
 <div class="container">
     <h1 class="text-center">Employees Page</h1>
     <div class="d-flex justify-content-end mb-3">
