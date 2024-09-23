@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA.DAL.Models.Department;
+﻿using LinkDev.IKEA.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,10 @@ namespace LinkDev.IKEA.DAL.Persistance.Data.Configurations.Departments
            builder.Property(D => D.Name).HasColumnType("nvarchar(50)");
            builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GETDATE()");
            builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETDATE()");
-
+           builder.HasMany(D => D.Employees)
+                  .WithOne(E => E.Department)
+                  .HasForeignKey(E => E.DepartmentId)
+                  .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

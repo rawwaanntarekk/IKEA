@@ -2,9 +2,18 @@
 
 @{
     ViewData["Title"] = "Employees";
+
+    // Compiler Enforce type safety
+    string? viewDataMessage = ViewData["Message"] as string;
+    // Compiler will skip type checking and will not enforce type safety
+    string? tempDataMessage = ViewBag.Message ;
 }
+
+<partial name="_ToastPartial" />
+
+
 <div class="container">
-    <h1 class="text-center">Departments Page</h1>
+    <h1 class="text-center">Employees Page</h1>
     <div class="d-flex justify-content-end mb-3">
         <a asp-controller="Employee" asp-action="Create" type="button" class="btn btn-outline-dark mt-3">
             <i class="fa-solid fa-plus"></i>
@@ -18,6 +27,7 @@
                     <tr>
                         <th>@Html.DisplayNameFor(e  => e.Name)</th>
                         <th>@Html.DisplayNameFor(e => e.Email)</th>
+                        <th>@Html.DisplayNameFor(e => e.Department)</th>
                         <th>@Html.DisplayNameFor(e => e.Age)</th>
                         <th>@Html.DisplayNameFor(e => e.Salary)</th>
                         <th>@Html.DisplayNameFor(e => e.IsActive)</th>
@@ -37,30 +47,15 @@
                         <tr>
                             <td>@Html.DisplayFor(X => employee.Name)</td>
                             <td>@Html.DisplayFor(X => employee.Email)</td>
+                            <td>@Html.DisplayFor(X => employee.Department)</td>
                             <td>@Html.DisplayFor(X => employee.Age)</td>
                             <td>@Html.DisplayFor(X => employee.Salary)</td>
                             <td>@Html.DisplayFor(X => employee.IsActive)</td>
                             <td>@Html.DisplayFor(X => employee.Gender)</td>
                             <td>@Html.DisplayFor(X => employee.EmployeeType)</td>
 
-
-
                             
-                            <td>
-                                <a asp-controller="Employee" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-dark">
-                                        <i class="fa-solid fa-eye me-2"></i> Details
-                                    </a>
-                            </td>
-                            <td>
-                                    <a asp-controller="Employee" asp-action="Update" asp-route-id="@employee.Id" class="btn btn-dark">
-                                    <i class="fa-solid fa-pen-to-square me-2"></i>Update
-                                </a>
-                            </td>
-                            <td>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                          <i class="fa-solid fa-trash me-2"></i>Delete
-                                        </button>
-                            </td>
+                                   <partial name="_ButtonsPartial" model="@employee.Id"/>
                         </tr>
 
                         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

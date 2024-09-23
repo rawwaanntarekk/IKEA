@@ -1,0 +1,17 @@
+﻿
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    bool isSuccess = TempData["Success"] as bool? ?? false;
+
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+              <div id="liveToast" class="toast show border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white @(isSuccess? "bg-success": "bg-danger")">
+              <strong class="me-auto">IKEA</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+                    <div class="toast-body text-white @(isSuccess? "bg-success": "bg-danger")">
+                @TempData["Message"] 
+            </div>
+          </div>
+        </div>
+}

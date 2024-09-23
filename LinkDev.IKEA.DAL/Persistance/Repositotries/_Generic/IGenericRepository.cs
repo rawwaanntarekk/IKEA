@@ -1,5 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Models;
-using LinkDev.IKEA.DAL.Models.Department;
+using LinkDev.IKEA.DAL.Models.Departments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,8 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
     {
         public T? Get(int id);
         public IEnumerable<T> GetAll(bool withAsNoTracking = true);
-        public IQueryable<T> GetAllAsIQueryable();
+        public IQueryable<T> GetIQueryable();
+        public IEnumerable<T> GetIEnumerable();
         public int Add(T entity);
         public int Update(T entity);
         public int Delete(T entity);

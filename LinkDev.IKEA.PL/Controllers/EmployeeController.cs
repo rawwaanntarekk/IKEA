@@ -1,5 +1,6 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Models.Common.Enums;
 using LinkDev.IKEA.PL.ViewModels.Departments;
@@ -15,6 +16,16 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
+            // Helps to pass data from Controller [Action] to View
+            ViewData["Message"] = "Hello ViweData";
+
+            // ViewBag is a Dynamic Property (Introduced in ASP.NET Framework 4.0)
+            // Helps to pass data from Controller [Action] to View
+
+            ViewBag.Message = "Hello ViewBag";
+
+
             var employees = employeeService.GetAllEmployees();
             return View(employees);
         }
@@ -22,29 +33,54 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(CreatedEmployeeDTO employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(EmployeeViewModel employeeVM )
         {
             if (!ModelState.IsValid)
-                return View(employee);
+                return View(employeeVM);
 
             var message = string.Empty;
 
 
             try
             {
-                var result = employeeService.CreateEmployee(employee);
+                var CreatedEmployee = new CreatedEmployeeDTO()
+                {
+                    Name = employeeVM.Name,
+                    Age = employeeVM.Age,
+                    Email = employeeVM.Email,
+                    Phone = employeeVM.Phone,
+                    Address = employeeVM.Address,
+                    Salary = employeeVM.Salary,
+                    IsActive = employeeVM.IsActive,
+                    HiringDate = employeeVM.HiringDate,
+                    Gender = employeeVM.Gender,
+                    EmployeeType = employeeVM.EmployeeType,
+                    DepartmentId = employeeVM.DepartmentId
+                };
+                var result = employeeService.CreateEmployee(CreatedEmployee);
+
+                // 3. TempData : is a Property of type dictionary Object (Introduced in ASP.NET Framework 3.5)
+                // Helps to pass data netweem 2 consecutive requests
+
+
                 if (result > 0)
+                {
+                    TempData["Message"] = "Employee is added successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction("Index");
+                }
                 else
                 {
+                    TempData["Message"] = "Failed to add new employee";
+                    TempData["Success"] = false;
                     message = "Failed to add new employee";
                     ModelState.AddModelError("", message);
-                    return View(employee);
+                    return View(employeeVM);
                 }
             }
             catch (Exception ex)
@@ -59,7 +95,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
             ModelState.AddModelError("", message);
-            return View(employee);
+            return View(employeeVM);
         }
 
         
@@ -76,16 +112,20 @@ namespace LinkDev.IKEA.PL.Controllers
             return NotFound();
         }
 
+
+
         [HttpGet]
-        public IActionResult Update(int? id)
+        public IActionResult Update(int? id )
         {
             if (id is null)
                 return BadRequest();
 
+
+
             var employee = employeeService.GetEmployee(id.Value);
 
             if (employee is { })
-                return View(new EmployeeUpdateVM
+                return View(new EmployeeViewModel
                 {
                     Name = employee.Name,
                     Age = employee.Age,
@@ -95,8 +135,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
-                  
-
+                    //Gender = (Gender) Enum.Parse(typeof(Gender) , employee.Gender),
+                    //EmployeeType = (EmpType) Enum.Parse(typeof(EmpType) , employee.EmployeeType)
 
                 }
                );
@@ -106,7 +146,8 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update([FromRoute] int id, EmployeeUpdateVM employeeUpdateVM)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
         {
             if (!ModelState.IsValid)
                 return View(employeeUpdateVM);
@@ -126,6 +167,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employeeUpdateVM.Salary,
                     IsActive = employeeUpdateVM.IsActive,
                     HiringDate = employeeUpdateVM.HiringDate,
+                    Gender = employeeUpdateVM.Gender,
+                    EmployeeType = employeeUpdateVM.EmployeeType,
 
 
                 };
@@ -133,8 +176,14 @@ namespace LinkDev.IKEA.PL.Controllers
                 var result = employeeService.UpdateEmployee(id, employee);
 
                 if (result > 0)
+                {
+                    TempData["Message"] = "Employee is updated successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
+                }
 
+                TempData["Message"] = "Failed to update employee";
+                TempData["Success"] = false;
                 message = "Failed to update department";
             }
             catch (Exception ex)
@@ -173,6 +222,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
@@ -181,8 +231,16 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = employeeService.DeleteEmployee(id);
 
                 if (deleted)
+                {
+                    TempData["Message"] = "Employee is deleted successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
 
+
+                }
+
+                TempData["Message"] = "Failed to delete employee";
+                TempData["Success"] = false;
                 message = "an error has occured during deleting the employee :(";
             }
             catch (Exception ex)

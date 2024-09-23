@@ -1,4 +1,6 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.DAL.Models.Common.Enums;
+using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.DAL.Models.Employees;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
 using Microsoft.EntityFrameworkCore;
@@ -19,17 +21,18 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 Name = employee.Name,
                 Address = employee.Address,
                 Age = employee.Age,
-                Salary = employee.Salary,
+                Salary =(decimal) employee.Salary!,
                 IsActive = employee.IsActive,
                 Email = employee.Email!,
                 PhoneNumber = employee.Phone!,
-                HiringDate = employee.HiringDate,
-                Gender = employee.Gender,
-                EmployeeType = employee.EmployeeType,
+                HiringDate = (DateOnly)employee.HiringDate!,
+                Gender = (Gender) employee.Gender!,
+                EmployeeType = (EmpType) employee.EmployeeType!,
                 CreatedBy = 1,
                 CreatedOn = DateTime.UtcNow,
                 LastModifiedBy = 1,
-                LastModifiedOn = DateTime.UtcNow
+                LastModifiedOn = DateTime.UtcNow,
+                DepartmentId = employee.DepartmentId
             };
 
             return employeeRepository.Add(CreatedEmployee);
@@ -47,7 +50,11 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
         public IEnumerable<EmployeeGeneralDTO> GetAllEmployees()
         {
-            return employeeRepository.GetAllAsIQueryable().Where(e => !e.IsDeleted).Select(e => new EmployeeGeneralDTO
+            var employee = employeeRepository
+                .GetIQueryable()
+                .Where(e => !e.IsDeleted)
+                .Include(e => e.Department)
+            .Select(e => new EmployeeGeneralDTO
             {
                 Id = e.Id,
                 Name = e.Name,
@@ -57,7 +64,10 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 Email = e.Email,
                 Gender = e.Gender.ToString(),
                 EmployeeType = e.EmployeeType.ToString(),
-            }).AsNoTracking().ToList();
+                Department = e.Department != null ? e.Department.Name : "No Department"
+            }).ToList();
+            return employee;
+
         }
 
         public EmployeeDetailsDTO? GetEmployee(int id)
@@ -77,6 +87,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     HiringDate = employee.HiringDate,
                     Gender = nameof(employee.Gender),
                     EmployeeType = nameof(employee.EmployeeType),
+                    Department = employee.Department?.Name
                 };
 
             return null;
@@ -100,7 +111,9 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 CreatedBy = 1,
                 CreatedOn = DateTime.UtcNow,
                 LastModifiedBy = 1,
-                LastModifiedOn = DateTime.UtcNow
+                LastModifiedOn = DateTime.UtcNow,
+                DepartmentId = employee.DepartmentId
+                
             };
             return employeeRepository.Update(CreatedEmployee);
         }
