@@ -1,0 +1,88 @@
+﻿@model CreatedEmployeeDTO
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="mb-3 text-center">Create New Employee</h1>
+<div class="w-100 mb-5"></div>
+
+<div class="container">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="row g-3 justify-content-center">
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Name" class="form-control" placeholder="Name">
+                <label asp-for="Name" class="formInput ms-2"></label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Email" class="form-control" placeholder="Email">
+                <label asp-for="Email" class="formInput ms-2"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Address" class="form-control" placeholder="Address">
+                <label asp-for="Address" class="formInput ms-2"></label>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Age" class="form-control" placeholder="Age">
+                <label asp-for="Age" class="formInput ms-2"></label>
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Salary" class="form-control" placeholder="Salary">
+                <label asp-for="Salary" class="formInput ms-2"></label>
+                <span asp-validation-for="Salary" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input asp-for="Phone" class="form-control" placeholder="Phone">
+                <label asp-for="Phone" class="formInput ms-2"></label>
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating col-md-8 mb-3">
+                <input type="date" asp-for="HiringDate" class="form-control" placeholder="Hiring Date">
+                <label asp-for="HiringDate" class="formInput ms-2"></label>
+                <span asp-validation-for="HiringDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-check col-md-8 mb-3 ms-3">
+                <input asp-for="IsActive" class="form-check-input" placeholder="Is Active" type="checkbox">
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+
+            <div class="form-group col-md-8 mb-3">
+                <label asp-for="Gender" class="form-label"></label>
+                <div>
+                    @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
+                    {
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" asp-for="Gender" value="@genderOption" />
+                                <label class="form-check-label">@genderOption</label>
+                            </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group col-md-8 mb-3">
+                <label asp-for="EmployeeType" class="form-label"></label>
+                <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmpType>()" class="form-control">
+                    <option value="@null">Select Employee Type</option>
+                </select>
+                <span asp-validation-for="EmployeeType" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-8 text-end">
+                <button type="submit" class="btn btn-success text-light ms-auto">Save</button>
+                <a asp-action="Index" class="btn btn-dark text-light">Back To List</a>
+            </div>
+        </div>
+    </form>
+</div>
