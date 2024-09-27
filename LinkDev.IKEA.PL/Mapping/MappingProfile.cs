@@ -11,8 +11,12 @@ namespace LinkDev.IKEA.PL.Mapping
         {
 
             #region Department
-            CreateMap<DepartmentDetailsDTO, DepartmentViewModel>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            CreateMap<DepartmentDetailsDTO, DepartmentViewModel>();
+            //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            // .reverseMap();
+
+            CreateMap<DepartmentViewModel, UpdatedDepartmentDTO>();
+            CreateMap<DepartmentViewModel, CreatedDepartmentDTO>();
               
 
             #endregion
