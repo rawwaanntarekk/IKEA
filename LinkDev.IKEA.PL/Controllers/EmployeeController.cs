@@ -13,11 +13,28 @@ namespace LinkDev.IKEA.PL.Controllers
         IWebHostEnvironment env) : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string Search)
         {
-            var employees = employeeService.GetAllEmployees();
+            // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
+            // Helps to pass data from Controller [Action] to View
+            ViewData["Message"] = "Hello ViweData";
+
+            // ViewBag is a Dynamic Property (Introduced in ASP.NET Framework 4.0)
+            // Helps to pass data from Controller [Action] to View
+
+            ViewBag.Message = "Hello ViewBag";
+
+
+            var employees = employeeService.GetEmployees(Search);
             return View(employees);
         }
+
+        public IActionResult Search(string Search)
+        {
+            var employees = employeeService.GetEmployees(Search);
+            return PartialView("Partials/EmployeeListPartial", employees);
+        }
+
 
         [HttpGet]
         public IActionResult Create()

@@ -1,17 +1,10 @@
 ﻿using LinkDev.IKEA.DAL.Models.Common.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LinkDev.IKEA.BLL.Models.Employees
+namespace LinkDev.IKEA.PL.ViewModels.Employees
 {
-    public class UpdatedEmployeeDTO
+    public class EmployeeViewModel
     {
-        public int Id { get; set; }
-
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
         [MinLength(3, ErrorMessage = "Name must be at least 3 characters")]
         public string Name { get; set; } = null!;

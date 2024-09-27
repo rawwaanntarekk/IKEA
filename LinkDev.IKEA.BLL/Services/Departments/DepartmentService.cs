@@ -1,5 +1,5 @@
 ﻿using LinkDev.IKEA.BLL.Models;
-using LinkDev.IKEA.DAL.Models.Department;
+using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Departments;
 using Microsoft.EntityFrameworkCore;
 

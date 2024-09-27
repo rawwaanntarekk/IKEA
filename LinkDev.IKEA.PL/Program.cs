@@ -1,6 +1,6 @@
 using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
-using LinkDev.IKEA.DAL.Models.Department;
+using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.DAL.Persistance.Data;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
@@ -32,7 +32,8 @@ namespace LinkDev.IKEA.PL
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies()
+                       .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 
             });
 

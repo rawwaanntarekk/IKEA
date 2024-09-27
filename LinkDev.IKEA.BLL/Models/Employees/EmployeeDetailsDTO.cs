@@ -43,5 +43,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public DateTime CreatedOn { get; set; }
         public int LastModifiedBy { get; set; }
         public DateTime LastModifiedOn { get; set; }
+
+        public string? Department { get; set; }
     }
 }

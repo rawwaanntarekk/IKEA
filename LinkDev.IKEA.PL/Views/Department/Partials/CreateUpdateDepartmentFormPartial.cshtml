@@ -1,14 +1,6 @@
-﻿@model DepartmentViewModel
-@{
-    ViewData["Title"] = "Update";
-    ViewData["Action"] = "Update";
-}
-
-<h1 class="mb-3 text-center">Update Department</h1>
-<div class="w-100 mb-5"></div>
-
-<div class="container">
-   <form asp-action="Update" >
+﻿ @model DepartmentViewModel
+  
+<form asp-action="@ViewBag.Action" >
        <div asp-validation-summary="ModelOnly"></div>
        <div class="row justify-content-center">
            <div class="form-floating mb-3 col-md-8">
@@ -33,16 +25,7 @@
            <div class="w-100"></div> 
            <div class="col-md-8 text-end">
                <button type="submit" class="btn btn-success text-light ms-auto">Save</button>
-               <a asp-action="Index" class="btn btn-dark text-light">Cancel</a>
+               <a asp-action="Index" class="btn btn-dark text-light">Back To List</a>
            </div>
        </div>
    </form>
-</div>
-
-
-@section Scripts {
-      <partial name="_ValidationScriptsPartial"/>
-}
-
-
-

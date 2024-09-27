@@ -1,6 +1,6 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Services.Departments;
-using LinkDev.IKEA.DAL.Models.Department;
+using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,24 +27,41 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDTO department)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(DepartmentViewModel departmentVM)
         {
            if(!ModelState.IsValid)
-                return View(department);
+                return View(departmentVM);
 
            var message = string.Empty;
 
 
             try
             {
-                var result = departmentService.CreateDepartment(department);
+                var createdDepartment = new CreatedDepartmentDTO()
+                {
+                  
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+
+                };
+
+                var result = departmentService.CreateDepartment(createdDepartment);
                 if (result > 0)
+                {
+                    TempData["Message"] = "Department is created successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction("Index");
+                }
                 else
                 {
+                    TempData["Message"] = "Failed to create department";
+                    TempData["Success"] = false;
                     message = "Failed to create department";
                     ModelState.AddModelError("", message);
-                    return View(department);
+                    return View(departmentVM);
                 }
             }
             catch (Exception ex)
@@ -59,7 +76,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
             ModelState.AddModelError("", message);
-            return View(department);
+            return View(departmentVM);
         }
 
         [HttpGet]
@@ -83,7 +100,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var department = departmentService.GetDepartmentByID(id.Value);
 
             if(department is { })
-                return View(new DepartmentUpdateViewModel()
+                return View(new DepartmentViewModel()
                 {
                     Code = department.Code,
                     Name = department.Name,
@@ -96,7 +113,8 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update([FromRoute] int id, DepartmentUpdateViewModel departmentVM)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromRoute] int id, DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -118,8 +136,15 @@ namespace LinkDev.IKEA.PL.Controllers
                 var result = departmentService.UpdateDepartment(departmentToUpdate);
 
                 if (result > 0)
-                    return RedirectToAction(nameof(Index));
+                {
 
+                    TempData["Message"] = "Department is updated successfully";
+                    TempData["Success"] = true;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                TempData["Message"] = "Failed to update department";
+                TempData["Success"] = false;
                 message = "Failed to update department";
             }
             catch (Exception ex)
@@ -158,6 +183,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
@@ -166,8 +192,14 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = departmentService.deleteDepartment(id);
 
                 if (deleted)
+                {
+                    TempData["Message"] = "Department is deleted successfully";
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
+                }
 
+                TempData["Message"] = "department is not deleted :(";
+                TempData["Success"] = false;
                 message = "an error has occured during deleting the department :(";
             }
             catch (Exception ex)
