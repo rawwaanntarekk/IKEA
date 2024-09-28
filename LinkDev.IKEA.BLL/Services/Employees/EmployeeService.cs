@@ -1,19 +1,59 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Models.Common.Enums;
-using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.DAL.Models.Employees;
-using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LinkDev.IKEA.BLL.Services.Employees
 {
-    public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployeeService
+    public class EmployeeService(IUnitOfWork _UnitOfWork) : IEmployeeService
     {
+        public IEnumerable<EmployeeGeneralDTO> GetEmployees(string Search)
+        {
+            var employee = _UnitOfWork.EmployeeRepository
+                .GetIQueryable()
+                .Where(e => !e.IsDeleted && (string.IsNullOrEmpty(Search) || e.Name.ToLower().Contains(Search.ToLower())))
+                .Include(e => e.Department)
+                .Select(e => new EmployeeGeneralDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Age = e.Age,
+                    Salary = e.Salary,
+                    IsActive = e.IsActive,
+                    Email = e.Email,
+                    Gender = e.Gender.ToString(),
+                    EmployeeType = e.EmployeeType.ToString(),
+                    Department = e.Department != null ? e.Department.Name : "No Department"
+                }).ToList();
+                return employee;
+
+        }
+
+        public EmployeeDetailsDTO? GetEmployee(int id)
+        {
+            var employee = _UnitOfWork.EmployeeRepository.Get(id);
+            if (employee is { })
+                return new EmployeeDetailsDTO
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Address = employee.Address,
+                    Age = employee.Age,
+                    Salary = employee.Salary,
+                    IsActive = employee.IsActive,
+                    Email = employee.Email,
+                    Phone = employee.PhoneNumber,
+                    HiringDate = employee.HiringDate,
+                    Gender = nameof(employee.Gender),
+                    EmployeeType = nameof(employee.EmployeeType),
+                    Department = employee.Department?.Name
+                };
+
+            return null;
+
+        }
         public int CreateEmployee(CreatedEmployeeDTO employee)
         {
             var CreatedEmployee = new Employee
@@ -35,63 +75,9 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 DepartmentId = employee.DepartmentId
             };
 
-            return employeeRepository.Add(CreatedEmployee);
-        }
+            _UnitOfWork.EmployeeRepository.Add(CreatedEmployee);
 
-        public bool DeleteEmployee(int id)
-        {
-           var employee = employeeRepository.Get(id);
-           if (employee is { })
-                return employeeRepository.Delete(employee) > 0;
-           return false;
-
-
-        }
-
-        public IEnumerable<EmployeeGeneralDTO> GetEmployees(string Search)
-        {
-            var employee = employeeRepository
-                .GetIQueryable()
-                .Where(e => !e.IsDeleted && (string.IsNullOrEmpty(Search) || e.Name.ToLower().Contains(Search.ToLower() )))
-                .Include(e => e.Department)
-            .Select(e => new EmployeeGeneralDTO
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Age = e.Age,
-                Salary = e.Salary,
-                IsActive = e.IsActive,
-                Email = e.Email,
-                Gender = e.Gender.ToString(),
-                EmployeeType = e.EmployeeType.ToString(),
-                Department = e.Department != null ? e.Department.Name : "No Department"
-            }).ToList();
-            return employee;
-
-        }
-
-        public EmployeeDetailsDTO? GetEmployee(int id)
-        {
-            var employee = employeeRepository.Get(id);
-            if (employee is { })
-                return new EmployeeDetailsDTO
-                {
-                    Id = employee.Id,
-                    Name = employee.Name,
-                    Address = employee.Address,
-                    Age = employee.Age,
-                    Salary = employee.Salary,
-                    IsActive = employee.IsActive,
-                    Email = employee.Email,
-                    Phone = employee.PhoneNumber,
-                    HiringDate = employee.HiringDate,
-                    Gender = nameof(employee.Gender),
-                    EmployeeType = nameof(employee.EmployeeType),
-                    Department = employee.Department?.Name
-                };
-
-            return null;
-
+            return _UnitOfWork.Complete();
         }
 
         public int UpdateEmployee(int id, UpdatedEmployeeDTO employee)
@@ -113,9 +99,32 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
                 DepartmentId = employee.DepartmentId
-                
+
             };
-            return employeeRepository.Update(CreatedEmployee);
+
+            _UnitOfWork.EmployeeRepository.Update(CreatedEmployee);
+
+            return _UnitOfWork.Complete();
+           
         }
+
+        public bool DeleteEmployee(int id)
+        {
+           var employeeRepo = _UnitOfWork.EmployeeRepository;
+           var employee = employeeRepo.Get(id);
+           if (employee is { })
+                employeeRepo.Delete(employee);
+
+            return _UnitOfWork.Complete() > 0;
+         
+
+
+        }
+
+       
+
+       
+
+       
     }
 }

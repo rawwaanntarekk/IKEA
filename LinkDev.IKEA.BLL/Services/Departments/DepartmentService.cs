@@ -1,16 +1,16 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.DAL.Models.Departments;
-using LinkDev.IKEA.DAL.Persistance.Repositotries.Departments;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace LinkDev.IKEA.BLL.Services.Departments
 {
-    public class DepartmentService(IDepartmentRepository _departmentRepository) : IDepartmentService
+    public class DepartmentService(IUnitOfWork _unitOfWork) : IDepartmentService
     {
         public IEnumerable<DepartmentGeneralDTO> GetAllDepartments()
         {
-            return _departmentRepository.GetAllAsIQueryable()
+            return _unitOfWork.DepartmentRepository.GetAllAsIQueryable()
                 .Select(d => new DepartmentGeneralDTO
             {
                 Id = d.Id,
@@ -21,10 +21,9 @@ namespace LinkDev.IKEA.BLL.Services.Departments
             }).AsNoTracking().ToList();
            
         }
-
         public DepartmentDetailsDTO? GetDepartmentByID(int id)
         {
-            var department = _departmentRepository.Get(id);
+            var department = _unitOfWork.DepartmentRepository.Get(id);
             if (department is { })
                 return new DepartmentDetailsDTO
                 {
@@ -53,7 +52,8 @@ namespace LinkDev.IKEA.BLL.Services.Departments
 
             };
 
-            return _departmentRepository.Add(newDept);
+            _unitOfWork.DepartmentRepository.Add(newDept);
+            return _unitOfWork.Complete();
 
         }
         public int UpdateDepartment(UpdatedDepartmentDTO department)
@@ -70,17 +70,18 @@ namespace LinkDev.IKEA.BLL.Services.Departments
 
           };
 
-            return _departmentRepository.Update(dept);
-           
+            _unitOfWork.DepartmentRepository.Update(dept);
+            return _unitOfWork.Complete();
 
         }
-
         public bool deleteDepartment(int id)
         {
-            var department = _departmentRepository.Get(id);
+            var departmentRepo = _unitOfWork.DepartmentRepository;
+            var department = departmentRepo.Get(id);
             if (department is { })
-                return _departmentRepository.Delete(id) > 0;
-            return false;
+                departmentRepo.Delete(id);
+
+            return _unitOfWork.Complete() > 0;
         }
 
 

@@ -45,18 +45,13 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
         {
             return _dbContext.Set<T>();
         }
-        public int Add(T entity)
-        {
-            _dbContext.Set<T>().Add(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Add(T entity) 
+            => _dbContext.Set<T>().Add(entity);
+      
 
-        public int Update(T entity)
-        {
-            _dbContext.Set<T>().Update(entity);
-            return _dbContext.SaveChanges();
-        }
-        public int Delete(T entity)
+        public void Update(T entity)
+            => _dbContext.Set<T>().Update(entity);
+        public void Delete(T entity)
         {
             if (entity is { })
             {
@@ -64,7 +59,6 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
                 _dbContext.Set<T>().Update(entity);
             }
                 
-            return _dbContext.SaveChanges();
         }
 
 
