@@ -2,6 +2,11 @@
 
 @{
     ViewData["Title"] = "Employees";
+
+    // Compiler Enforce type safety
+    string? viewDataMessage = ViewData["Message"] as string;
+    // Compiler will skip type checking and will not enforce type safety
+    string? tempDataMessage = ViewBag.Message ;
 }
 
 <partial name="_ToastPartial" />

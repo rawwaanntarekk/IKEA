@@ -56,7 +56,6 @@ namespace LinkDev.IKEA.PL.Controllers
                 //};
 
                 var createdDepartment = _mapper.Map<DepartmentViewModel, CreatedDepartmentDTO>(departmentVM);
-
                 var result = departmentService.CreateDepartment(createdDepartment);
                 if (result > 0)
                 {
@@ -67,6 +66,8 @@ namespace LinkDev.IKEA.PL.Controllers
                 }
                 else
                 {
+                    TempData["Message"] = "Failed to create department";
+                    TempData["Success"] = false;
                     message = "Failed to create department";
                     TempData["Message"] = message;
                     TempData["Success"] = false;
