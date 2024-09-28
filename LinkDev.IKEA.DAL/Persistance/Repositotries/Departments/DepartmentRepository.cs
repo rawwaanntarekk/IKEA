@@ -34,24 +34,21 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries.Departments
             return _dbContext.Departments;
         }
 
-        public int Add(Department entity)
+        public void Add(Department entity)
         {
            _dbContext.Departments.Add(entity);
-            return _dbContext.SaveChanges();
         }
-        public int Update(Department entity)
+        public void Update(Department entity)
         {
            _dbContext.Departments.Update(entity);
-          return _dbContext.SaveChanges();
         }
 
-        public int Delete(int id)
+        public void Delete(int id)
         {
             var department = _dbContext.Departments.Find(id);
             if (department is { })
                 _dbContext.Departments.Remove(department);
 
-            return _dbContext.SaveChanges();
         }
 
 

@@ -1,10 +1,9 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Employees;
-using LinkDev.IKEA.DAL.Models.Common.Enums;
-using LinkDev.IKEA.PL.ViewModels.Departments;
 using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Configuration;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
@@ -28,14 +27,13 @@ namespace LinkDev.IKEA.PL.Controllers
             var employees = employeeService.GetEmployees(Search);
             return View(employees);
         }
-
         public IActionResult Search(string Search)
         {
             var employees = employeeService.GetEmployees(Search);
             return PartialView("Partials/EmployeeListPartial", employees);
         }
 
-
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -56,10 +54,17 @@ namespace LinkDev.IKEA.PL.Controllers
             {
                 var result = employeeService.CreateEmployee(employee);
                 if (result > 0)
+                {
+                    message = "Employee is added successfully";
+                    TempData["Message"] = message;
+                    TempData["Success"] = true;
                     return RedirectToAction("Index");
+                }
                 else
                 {
                     message = "Failed to add new employee";
+                    TempData["Message"] = message;
+                    TempData["Success"] = false;
                     ModelState.AddModelError("", message);
                     return View(employee);
                 }
@@ -78,9 +83,9 @@ namespace LinkDev.IKEA.PL.Controllers
             ModelState.AddModelError("", message);
             return View(employee);
         }
+        #endregion
 
-        
-
+        #region Details
         [HttpGet]
         public IActionResult Details(int? id)
         {
@@ -91,8 +96,10 @@ namespace LinkDev.IKEA.PL.Controllers
             if (employee is { })
                 return View(employee);
             return NotFound();
-        }
+        } 
+        #endregion
 
+        #region Update
         [HttpGet]
         public IActionResult Update(int? id)
         {
@@ -102,7 +109,7 @@ namespace LinkDev.IKEA.PL.Controllers
             var employee = employeeService.GetEmployee(id.Value);
 
             if (employee is { })
-                return View(new EmployeeUpdateVM
+                return View(new EmployeeViewModel
                 {
                     Name = employee.Name,
                     Age = employee.Age,
@@ -112,9 +119,6 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
-                  
-
-
                 }
                );
 
@@ -123,7 +127,8 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update([FromRoute] int id, EmployeeUpdateVM employeeUpdateVM)
+        [ValidateAntiForgeryToken]
+        public IActionResult Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
         {
             if (!ModelState.IsValid)
                 return View(employeeUpdateVM);
@@ -150,9 +155,17 @@ namespace LinkDev.IKEA.PL.Controllers
                 var result = employeeService.UpdateEmployee(id, employee);
 
                 if (result > 0)
-                    return RedirectToAction(nameof(Index));
+                {
+                    message = "Department is updated successfully";
+                    TempData["Message"] = message;
+                    TempData["Success"] = true;
+                    return RedirectToAction("Index");
+
+                }
 
                 message = "Failed to update department";
+                TempData["Message"] = message;
+                TempData["Success"] = false;
             }
             catch (Exception ex)
             {
@@ -170,8 +183,8 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
 
-        }
-
+        } 
+        #endregion
 
         #region Delete Action
         [HttpGet]
@@ -198,9 +211,16 @@ namespace LinkDev.IKEA.PL.Controllers
                 var deleted = employeeService.DeleteEmployee(id);
 
                 if (deleted)
+                {
+                    message = "Employee is deleted successfully";
+                    TempData["Message"] = message;
+                    TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
+                }
 
                 message = "an error has occured during deleting the employee :(";
+                TempData["Message"] = message;
+                TempData["Success"] = false;
             }
             catch (Exception ex)
             {
@@ -216,7 +236,6 @@ namespace LinkDev.IKEA.PL.Controllers
             //ModelState.AddModelError(string.Empty, message);
             return RedirectToAction(nameof(Index));
 
-            #endregion
 
 
 
@@ -225,5 +244,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         }
+        #endregion
+
     }
 }

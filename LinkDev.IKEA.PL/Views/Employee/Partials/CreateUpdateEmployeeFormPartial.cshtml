@@ -3,7 +3,7 @@
 @inject IDepartmentService departmentService
 
 @{
-    var Departments = new SelectList(departmentService.GetAllDepartments(), nameof(DepartmentGeneralDTO.Id), nameof(DepartmentGeneralDTO.Name));
+    var Departments = new SelectList(departmentService.GetDepartments(string.Empty), nameof(DepartmentGeneralDTO.Id), nameof(DepartmentGeneralDTO.Name));
 }
 
 

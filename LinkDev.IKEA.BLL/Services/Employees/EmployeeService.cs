@@ -80,9 +80,9 @@ namespace LinkDev.IKEA.BLL.Services.Employees
             return _UnitOfWork.Complete();
         }
 
-        public int UpdateEmployee(int id, UpdatedEmployeeDTO employee)
+        public int UpdateEmployee(int id , UpdatedEmployeeDTO employee)
         {
-            var CreatedEmployee = new Employee
+            var employeeToUpdate = new Employee
             {
                 Id = id,
                 Name = employee.Name,
@@ -102,7 +102,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
 
             };
 
-            _UnitOfWork.EmployeeRepository.Update(CreatedEmployee);
+            _UnitOfWork.EmployeeRepository.Update(employeeToUpdate);
 
             return _UnitOfWork.Complete();
            

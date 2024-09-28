@@ -8,11 +8,12 @@ namespace LinkDev.IKEA.BLL.Services.Departments
 {
     public class DepartmentService(IUnitOfWork _unitOfWork) : IDepartmentService
     {
-        public IEnumerable<DepartmentGeneralDTO> GetAllDepartments()
+        public IEnumerable<DepartmentGeneralDTO> GetDepartments(string search)
         {
             return _unitOfWork.DepartmentRepository.GetAllAsIQueryable()
+                .Where(d => !d.IsDeleted && (string.IsNullOrEmpty(search)|| d.Name.ToLower().Contains(search.ToLower())))
                 .Select(d => new DepartmentGeneralDTO
-            {
+                {
                 Id = d.Id,
                 Code = d.Code,
                 Name = d.Name,
@@ -21,6 +22,9 @@ namespace LinkDev.IKEA.BLL.Services.Departments
             }).AsNoTracking().ToList();
            
         }
+
+
+       
         public DepartmentDetailsDTO? GetDepartmentByID(int id)
         {
             var department = _unitOfWork.DepartmentRepository.Get(id);

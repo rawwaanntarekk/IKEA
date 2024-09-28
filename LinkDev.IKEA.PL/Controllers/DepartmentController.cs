@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Services.Departments;
-using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +14,16 @@ namespace LinkDev.IKEA.PL.Controllers
         IMapper _mapper) : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string search)
         {
-            var departments = departmentService.GetAllDepartments();
+            var departments = departmentService.GetDepartments(search);
             return View(departments);
+        }
+
+        public IActionResult Search(string search)
+        {
+            var departments = departmentService.GetDepartments(search);
+            return PartialView("Partials/EmployeeListPartial" , departments);
         }
 
         [HttpGet]
@@ -55,15 +60,16 @@ namespace LinkDev.IKEA.PL.Controllers
                 var result = departmentService.CreateDepartment(createdDepartment);
                 if (result > 0)
                 {
-                    TempData["Message"] = "Department is created successfully";
+                    message = "Department is created successfully";
+                    TempData["Message"] = message;
                     TempData["Success"] = true;
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["Message"] = "Failed to create department";
-                    TempData["Success"] = false;
                     message = "Failed to create department";
+                    TempData["Message"] = message;
+                    TempData["Success"] = false;
                     ModelState.AddModelError("", message);
                     return View(departmentVM);
                 }
@@ -127,16 +133,16 @@ namespace LinkDev.IKEA.PL.Controllers
 
             try
             {
-                //var departmentToUpdate = new UpdatedDepartmentDTO()
-                //{
-                //    Id = id,
-                //    Code = departmentVM.Code,
-                //    Name = departmentVM.Name,
-                //    Description = departmentVM.Description,
-                //    CreationDate = departmentVM.CreationDate,
+                var departmentToUpdate = new UpdatedDepartmentDTO()
+                {
+                    Id = id,
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
 
-                //};
-                var departmentToUpdate = _mapper.Map<DepartmentViewModel, UpdatedDepartmentDTO>(departmentVM);
+                };
+                //var departmentToUpdate = _mapper.Map<DepartmentViewModel, UpdatedDepartmentDTO>(departmentVM);
 
 
                 var result = departmentService.UpdateDepartment(departmentToUpdate);
@@ -189,7 +195,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
@@ -199,14 +205,15 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 if (deleted)
                 {
-                    TempData["Message"] = "Department is deleted successfully";
+                    message = "Department is deleted successfully";
+                    TempData["Message"] = message;
                     TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
                 }
 
-                TempData["Message"] = "department is not deleted :(";
+                message = "Failed to delete department";
+                TempData["Message"] = message;
                 TempData["Success"] = false;
-                message = "an error has occured during deleting the department :(";
             }
             catch (Exception ex)
             {

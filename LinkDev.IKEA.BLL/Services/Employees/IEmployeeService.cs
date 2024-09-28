@@ -12,7 +12,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
         IEnumerable<EmployeeGeneralDTO> GetEmployees(string Search);
         EmployeeDetailsDTO? GetEmployee(int id);
         int CreateEmployee(CreatedEmployeeDTO  employee);
-        int UpdateEmployee(int id, UpdatedEmployeeDTO employee);
+        int UpdateEmployee(int id ,UpdatedEmployeeDTO employee);
         bool DeleteEmployee(int id);
     }
 }
