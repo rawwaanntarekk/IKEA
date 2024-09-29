@@ -15,7 +15,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
     {
         public IEnumerable<EmployeeGeneralDTO> GetEmployees(string Search)
         {
-            var employee = _UnitOfWork.EmployeeRepository
+            var employees = _UnitOfWork.EmployeeRepository
                 .GetIQueryable()
                 .Where(e => !e.IsDeleted && (string.IsNullOrEmpty(Search) || e.Name.ToLower().Contains(Search.ToLower())))
                 .Include(e => e.Department)
@@ -29,9 +29,11 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     Email = e.Email,
                     Gender = e.Gender.ToString(),
                     EmployeeType = e.EmployeeType.ToString(),
-                    Department = e.Department != null ? e.Department.Name : "No Department"
+                    Department = e.Department != null ? e.Department.Name : "No Department",
+                    Image = e.ImageUrl
+                    
                 }).ToList();
-                return employee;
+                return employees;
 
         }
 
@@ -52,7 +54,8 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     HiringDate = employee.HiringDate,
                     Gender = nameof(employee.Gender),
                     EmployeeType = nameof(employee.EmployeeType),
-                    Department = employee.Department?.Name
+                    Department = employee.Department?.Name,
+                    Image = employee.ImageUrl
                 };
 
             return null;

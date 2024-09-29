@@ -248,7 +248,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 }
 
 
-                }
+
 
                 TempData["Message"] = "Failed to delete employee";
                 TempData["Success"] = false;
@@ -256,6 +256,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 TempData["Message"] = message;
                 TempData["Success"] = false;
             }
+
             catch (Exception ex)
             {
 

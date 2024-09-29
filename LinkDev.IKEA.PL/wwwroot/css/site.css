@@ -21,3 +21,11 @@ body {
   margin-bottom: 60px;
 }
 
+
+.circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+   
+}
