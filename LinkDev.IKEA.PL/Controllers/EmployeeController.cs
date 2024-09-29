@@ -1,5 +1,6 @@
 ﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
@@ -37,22 +38,41 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(CreatedEmployeeDTO employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(EmployeeViewModel employeeVM )
         {
             if (!ModelState.IsValid)
-                return View(employee);
+                return View(employeeVM);
 
             var message = string.Empty;
 
 
             try
             {
-                var result = employeeService.CreateEmployee(employee);
+                var CreatedEmployee = new CreatedEmployeeDTO()
+                {
+                    Name = employeeVM.Name,
+                    Age = employeeVM.Age,
+                    Email = employeeVM.Email,
+                    Phone = employeeVM.Phone,
+                    Address = employeeVM.Address,
+                    Salary = employeeVM.Salary,
+                    IsActive = employeeVM.IsActive,
+                    HiringDate = employeeVM.HiringDate,
+                    Gender = employeeVM.Gender,
+                    EmployeeType = employeeVM.EmployeeType,
+                    DepartmentId = employeeVM.DepartmentId
+                };
+                var result = employeeService.CreateEmployee(CreatedEmployee);
+
+                // 3. TempData : is a Property of type dictionary Object (Introduced in ASP.NET Framework 3.5)
+                // Helps to pass data netweem 2 consecutive requests
+
+
                 if (result > 0)
                 {
                     message = "Employee is added successfully";
@@ -62,11 +82,13 @@ namespace LinkDev.IKEA.PL.Controllers
                 }
                 else
                 {
+                    TempData["Message"] = "Failed to add new employee";
+                    TempData["Success"] = false;
                     message = "Failed to add new employee";
                     TempData["Message"] = message;
                     TempData["Success"] = false;
                     ModelState.AddModelError("", message);
-                    return View(employee);
+                    return View(employeeVM);
                 }
             }
             catch (Exception ex)
@@ -81,7 +103,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
             ModelState.AddModelError("", message);
-            return View(employee);
+            return View(employeeVM);
         }
         #endregion
 
@@ -101,10 +123,12 @@ namespace LinkDev.IKEA.PL.Controllers
 
         #region Update
         [HttpGet]
-        public IActionResult Update(int? id)
+        public IActionResult Update(int? id )
         {
             if (id is null)
                 return BadRequest();
+
+
 
             var employee = employeeService.GetEmployee(id.Value);
 
@@ -119,6 +143,7 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
+
                 }
                );
 
@@ -148,6 +173,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employeeUpdateVM.Salary,
                     IsActive = employeeUpdateVM.IsActive,
                     HiringDate = employeeUpdateVM.HiringDate,
+                    Gender = employeeUpdateVM.Gender,
+                    EmployeeType = employeeUpdateVM.EmployeeType,
 
 
                 };
@@ -160,9 +187,10 @@ namespace LinkDev.IKEA.PL.Controllers
                     TempData["Message"] = message;
                     TempData["Success"] = true;
                     return RedirectToAction("Index");
-
                 }
 
+                TempData["Message"] = "Failed to update employee";
+                TempData["Success"] = false;
                 message = "Failed to update department";
                 TempData["Message"] = message;
                 TempData["Success"] = false;
@@ -203,6 +231,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
@@ -218,6 +247,11 @@ namespace LinkDev.IKEA.PL.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
+
+                }
+
+                TempData["Message"] = "Failed to delete employee";
+                TempData["Success"] = false;
                 message = "an error has occured during deleting the employee :(";
                 TempData["Message"] = message;
                 TempData["Success"] = false;
