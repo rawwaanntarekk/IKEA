@@ -10,12 +10,13 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
 {
     public interface IGenericRepository<T> where T : ModelBase
     {
-        public T? Get(int id);
-        public IEnumerable<T> GetAll(bool withAsNoTracking = true);
-        public IQueryable<T> GetIQueryable();
-        public IEnumerable<T> GetIEnumerable();
-        public void Add(T entity);
-        public void Update(T entity);
-        public void Delete(T entity);
+        // An asynchronous operation that can return a value
+        Task<T?> GetAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync(bool withAsNoTracking = true);
+        IQueryable<T> GetIQueryable();
+        IEnumerable<T> GetIEnumerable();
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
     }
 }

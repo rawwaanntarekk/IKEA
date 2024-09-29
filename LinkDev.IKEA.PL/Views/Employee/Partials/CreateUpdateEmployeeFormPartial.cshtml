@@ -3,7 +3,7 @@
 @inject IDepartmentService departmentService
 
 @{
-    var Departments = new SelectList(departmentService.GetDepartments(string.Empty), nameof(DepartmentGeneralDTO.Id), nameof(DepartmentGeneralDTO.Name));
+    var Departments = new SelectList(await departmentService.GetDepartmentsAsync(string.Empty), nameof(DepartmentGeneralDTO.Id), nameof(DepartmentGeneralDTO.Name));
 
 }
 
@@ -85,13 +85,13 @@
         <div class="form-group col-md-6 mb-3">
             <label asp-for="Gender" class="form-label"></label>
             <div>
-                            @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
-                            {
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" asp-for="Gender" value="@genderOption" />
-                                        <label class="form-check-label">@genderOption</label>
-                                    </div>
-                            }
+                    @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
+                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" asp-for="Gender" value="@genderOption" />
+                                            <label class="form-check-label">@genderOption</label>
+                                        </div>
+                    }
             </div>
             <span asp-validation-for="Gender" class="text-danger"></span>
             </div>

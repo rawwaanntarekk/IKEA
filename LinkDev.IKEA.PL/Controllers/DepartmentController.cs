@@ -14,15 +14,15 @@ namespace LinkDev.IKEA.PL.Controllers
         IMapper _mapper) : Controller
     {
         [HttpGet]
-        public IActionResult Index(string search)
+        public async Task<IActionResult> Index(string search)
         {
-            var departments = departmentService.GetDepartments(search);
+            var departments = await departmentService.GetDepartmentsAsync(search);
             return View(departments);
         }
 
-        public IActionResult Search(string search)
+        public async Task<IActionResult> Search(string search)
         {
-            var departments = departmentService.GetDepartments(search);
+            var departments = await departmentService.GetDepartmentsAsync(search);
             return PartialView("Partials/EmployeeListPartial" , departments);
         }
 
@@ -35,7 +35,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentViewModel departmentVM)
+        public async Task<IActionResult> Create(DepartmentViewModel departmentVM)
         {
            if(!ModelState.IsValid)
                 return View(departmentVM);
@@ -56,7 +56,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 //};
 
                 var createdDepartment = _mapper.Map<DepartmentViewModel, CreatedDepartmentDTO>(departmentVM);
-                var result = departmentService.CreateDepartment(createdDepartment);
+                var result = await  departmentService.CreateDepartmentAsync(createdDepartment);
                 if (result > 0)
                 {
                     message = "Department is created successfully";
@@ -91,24 +91,24 @@ namespace LinkDev.IKEA.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var department = departmentService.GetDepartmentByID(id.Value);
+            var department = await departmentService.GetDepartmentByIDAsync(id.Value);
             if (department is { })
                 return View(department);
             return NotFound();
         }
 
         [HttpGet]
-        public IActionResult Update(int? id)
+        public async Task<IActionResult> Update(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var department = departmentService.GetDepartmentByID(id.Value);
+            var department = await  departmentService.GetDepartmentByIDAsync(id.Value);
 
             if(department is { })
                 return View(new DepartmentViewModel()
@@ -125,7 +125,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id, DepartmentViewModel departmentVM)
+        public async Task<IActionResult> Update([FromRoute] int id, DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -146,7 +146,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 //var departmentToUpdate = _mapper.Map<DepartmentViewModel, UpdatedDepartmentDTO>(departmentVM);
 
 
-                var result = departmentService.UpdateDepartment(departmentToUpdate);
+                var result = await departmentService.UpdateDepartmentAsync(departmentToUpdate);
 
                 if (result > 0)
                 {
@@ -186,7 +186,7 @@ namespace LinkDev.IKEA.PL.Controllers
             if (id is null)
                 return BadRequest();
 
-            var department = departmentService.GetDepartmentByID(id.Value);
+            var department = departmentService.GetDepartmentByIDAsync(id.Value);
 
             if (department is null)
                 return NotFound();
@@ -197,12 +197,12 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var message = string.Empty;
             try
             {
-                var deleted = departmentService.deleteDepartment(id);
+                var deleted = await departmentService.deleteDepartmentAsync(id);
 
                 if (deleted)
                 {

@@ -1,12 +1,6 @@
 ﻿using LinkDev.IKEA.DAL.Models;
-using LinkDev.IKEA.DAL.Models.Employees;
 using LinkDev.IKEA.DAL.Persistance.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
 {
@@ -19,22 +13,22 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
         {
             _dbContext = dbContext;
         }
-        public T? Get(int id)
+        public async Task<T?> GetAsync(int id)
         {
-            var entity = _dbContext.Set<T>().Find(id);
+            var entity = _dbContext.Set<T>().FindAsync(id);
 
             if (entity is { })
-                return entity;
+                return await entity;
             return null;
 
         }
 
-        public IEnumerable<T> GetAll(bool withAsNoTracking = true)
+        public async Task<IEnumerable<T>> GetAllAsync(bool withAsNoTracking = true)
         {
             if (withAsNoTracking)
-                return _dbContext.Set<T>().Where(e => e.IsDeleted == false).AsNoTracking().ToList();
+                return await _dbContext.Set<T>().Where(e => e.IsDeleted == false).AsNoTracking().ToListAsync();
 
-            return _dbContext.Set<T>().Where(e => e.IsDeleted == false).ToList();
+            return await _dbContext.Set<T>().Where(e => e.IsDeleted == false).ToListAsync();
         }
 
         public IQueryable<T> GetIQueryable()
@@ -47,8 +41,6 @@ namespace LinkDev.IKEA.DAL.Persistance.Repositotries._Generic
         }
         public void Add(T entity) 
             => _dbContext.Set<T>().Add(entity);
-      
-
         public void Update(T entity)
             => _dbContext.Set<T>().Update(entity);
         public void Delete(T entity)

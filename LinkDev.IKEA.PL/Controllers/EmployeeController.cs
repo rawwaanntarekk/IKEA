@@ -1,10 +1,7 @@
-﻿using LinkDev.IKEA.BLL.Models;
-using LinkDev.IKEA.BLL.Models.Employees;
-using LinkDev.IKEA.BLL.Services.Departments;
+﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Configuration;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
@@ -13,7 +10,7 @@ namespace LinkDev.IKEA.PL.Controllers
         IWebHostEnvironment env) : Controller
     {
         [HttpGet]
-        public IActionResult Index(string Search)
+        public async Task<IActionResult> Index(string Search)
         {
             // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
             // Helps to pass data from Controller [Action] to View
@@ -25,12 +22,12 @@ namespace LinkDev.IKEA.PL.Controllers
             ViewBag.Message = "Hello ViewBag";
 
 
-            var employees = employeeService.GetEmployees(Search);
+            var employees = await employeeService.GetEmployeesAsync(Search);
             return View(employees);
         }
-        public IActionResult Search(string Search)
+        public async Task<IActionResult> Search(string Search)
         {
-            var employees = employeeService.GetEmployees(Search);
+            var employees = await employeeService.GetEmployeesAsync(Search);
             return PartialView("Partials/EmployeeListPartial", employees);
         }
 
@@ -43,7 +40,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel employeeVM )
+        public async Task<IActionResult> Create(EmployeeViewModel employeeVM )
         {
             if (!ModelState.IsValid)
                 return View(employeeVM);
@@ -67,7 +64,7 @@ namespace LinkDev.IKEA.PL.Controllers
                     EmployeeType = employeeVM.EmployeeType,
                     DepartmentId = employeeVM.DepartmentId
                 };
-                var result = employeeService.CreateEmployee(CreatedEmployee);
+                var result = await employeeService.CreateEmployeeAsync(CreatedEmployee);
 
                 // 3. TempData : is a Property of type dictionary Object (Introduced in ASP.NET Framework 3.5)
                 // Helps to pass data netweem 2 consecutive requests
@@ -109,12 +106,12 @@ namespace LinkDev.IKEA.PL.Controllers
 
         #region Details
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var employee = employeeService.GetEmployee(id.Value);
+            var employee = await employeeService.GetEmployeeAsync(id.Value);
             if (employee is { })
                 return View(employee);
             return NotFound();
@@ -123,14 +120,14 @@ namespace LinkDev.IKEA.PL.Controllers
 
         #region Update
         [HttpGet]
-        public IActionResult Update(int? id )
+        public async Task<IActionResult> Update(int? id )
         {
             if (id is null)
                 return BadRequest();
 
 
 
-            var employee = employeeService.GetEmployee(id.Value);
+            var employee = await employeeService.GetEmployeeAsync(id.Value);
 
             if (employee is { })
                 return View(new EmployeeViewModel
@@ -153,7 +150,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
+        public async Task<IActionResult> Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
         {
             if (!ModelState.IsValid)
                 return View(employeeUpdateVM);
@@ -179,7 +176,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 };
 
-                var result = employeeService.UpdateEmployee(id, employee);
+                var result = await employeeService.UpdateEmployeeAsync(id, employee);
 
                 if (result > 0)
                 {
@@ -216,12 +213,12 @@ namespace LinkDev.IKEA.PL.Controllers
 
         #region Delete Action
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var employee = employeeService.GetEmployee(id.Value);
+            var employee = await employeeService.GetEmployeeAsync(id.Value);
 
             if (employee is null)
                 return NotFound();
@@ -232,12 +229,12 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var message = string.Empty;
             try
             {
-                var deleted = employeeService.DeleteEmployee(id);
+                var deleted = await employeeService.DeleteEmployeeAsync(id);
 
                 if (deleted)
                 {

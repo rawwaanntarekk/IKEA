@@ -4,11 +4,11 @@ using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
 
 namespace LinkDev.IKEA.DAL.Persistance.UnitOfWork
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IAsyncDisposable
     {
-        public IEmployeeRepository  EmployeeRepository { get; }
-        public IDepartmentRepository  DepartmentRepository { get;}
-        int Complete();
+        IEmployeeRepository  EmployeeRepository { get; }
+        IDepartmentRepository  DepartmentRepository { get;}
+        Task<int> CompleteAsync();
 
     }
 }
