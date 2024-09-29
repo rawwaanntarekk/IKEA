@@ -7,10 +7,12 @@
 }
 
 
-<form asp-action="@ViewBag.Action">
+<form asp-action="@ViewBag.Action" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly"></div>
 
         <div class="row g-3 ">
+
+
             <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Name" class="form-control" placeholder="Name">
                 <label asp-for="Name" class="formInput ms-2"></label>
@@ -46,7 +48,7 @@
                 <label asp-for="Phone" class="formInput ms-2"></label>
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
-           
+
            <div class="col-md-12 ms-1">
                     <div class="row justify-content-between ">
                   <div class="form-group col-md-6 mb-3 ">
@@ -63,38 +65,46 @@
                     <span asp-validation-for="EmployeeType" class="text-danger"></span>
                 </div>
            </div>
+           </div>
 
-       
-                 <div class="form-floating col-md-12 mb-3  px-0">
-                    <input type="date" asp-for="HiringDate" class="form-control" placeholder="Hiring Date">
-                    <label asp-for="HiringDate" class="formInput ms-2"></label>
-                    <span asp-validation-for="HiringDate" class="text-danger"></span>
-                </div>
 
-     <div class="row align-items-start">
-    <!-- Gender Field -->
-    <div class="form-group col-md-6 mb-3">
-        <label asp-for="Gender" class="form-label"></label>
-        <div>
-                        @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
-                        {
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" asp-for="Gender" value="@genderOption" />
-                        <label class="form-check-label">@genderOption</label>
-                    </div>
-                        }
+            <div class="form-floating col-md-6 mb-3 ">
+            <input type="date" asp-for="HiringDate" class="form-control" placeholder="Hiring Date">
+            <label asp-for="HiringDate" class="formInput ms-2"></label>
+            <span asp-validation-for="HiringDate" class="text-danger"></span>
         </div>
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
 
-    <!-- IsActive Checkbox -->
-    <div class="form-group col-md-6 pb-3 d-flex align-items-end">
-        <div class="form-check">
-            <input asp-for="IsActive" class="form-check-input" type="checkbox">
-            <label asp-for="IsActive" class="form-check-label ms-2"></label>
+            <div class="form-group col-md-6 mb-3">
+                    <label asp-for="Image" class="formInput ms-2 "></label>
+                    <input asp-for="Image"   class="form-control " placeholder="Image URL">
+            </div>
+
+     <div class="col-md-6 row align-items-start">
+        <!-- Gender Field -->
+        <div class="form-group col-md-6 mb-3">
+            <label asp-for="Gender" class="form-label"></label>
+            <div>
+                            @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
+                            {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="Gender" value="@genderOption" />
+                                        <label class="form-check-label">@genderOption</label>
+                                    </div>
+                            }
+            </div>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+             <!-- IsActive Checkbox -->
+
+        <div class="form-group col-md-5 pb-3 d-flex align-items-end">
+            <div class="form-check">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                <label asp-for="IsActive" class="form-check-label ms-2"></label>
+            </div>
         </div>
-    </div>
 
+    </div>
 
 
             <div class="col-md-12 text-end">

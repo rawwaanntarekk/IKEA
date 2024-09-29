@@ -45,5 +45,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public DateTime LastModifiedOn { get; set; }
 
         public string? Department { get; set; }
+        public string? ImageUrl { get; set; }
+
     }
 }

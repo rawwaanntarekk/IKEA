@@ -1,4 +1,5 @@
-﻿using LinkDev.IKEA.BLL.Models.Employees;
+﻿using LinkDev.IKEA.BLL.Common.Services.Attachments;
+using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Models.Common.Enums;
 using LinkDev.IKEA.DAL.Models.Employees;
 using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
@@ -7,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.IKEA.BLL.Services.Employees
 {
-    public class EmployeeService(IUnitOfWork _UnitOfWork) : IEmployeeService
+    public class EmployeeService(IUnitOfWork _UnitOfWork,
+                                 IAttachmentService _attachmentService) : IEmployeeService
     {
         public IEnumerable<EmployeeGeneralDTO> GetEmployees(string Search)
         {
@@ -56,6 +58,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
         }
         public int CreateEmployee(CreatedEmployeeDTO employee)
         {
+            
             var CreatedEmployee = new Employee
             {
                 Name = employee.Name,
@@ -72,8 +75,12 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 CreatedOn = DateTime.UtcNow,
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
-                DepartmentId = employee.DepartmentId
+                DepartmentId = employee.DepartmentId,                
             };
+
+            if (employee.Image is not null)
+                CreatedEmployee.ImageUrl = _attachmentService.Upload(employee.Image, "images");
+
 
             _UnitOfWork.EmployeeRepository.Add(CreatedEmployee);
 
