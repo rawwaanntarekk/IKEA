@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Identity\" />
     <Folder Include="Persistance\Data\Migrations\" />
     <Folder Include="Persistance\Data\Data Seeds\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlserver" Version="8.0.8" />
