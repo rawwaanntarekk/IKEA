@@ -14,6 +14,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int? Age { get; set; }
+        [DataType(DataType.Currency)]
         public decimal Salary { get; set; }
         public bool IsActive { get; set; }
 
@@ -21,7 +22,8 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public string Email { get; set; } = null!;
         public string Gender { get; set; } = null!;
         public string EmployeeType { get; set; } = null!;
-
         public string Department { get; set; } = null!;
+        public string? Image { get; set; }
+
     }
 }

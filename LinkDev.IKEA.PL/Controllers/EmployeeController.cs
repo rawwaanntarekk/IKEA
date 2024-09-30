@@ -1,9 +1,5 @@
-﻿using LinkDev.IKEA.BLL.Models;
-using LinkDev.IKEA.BLL.Models.Employees;
-using LinkDev.IKEA.BLL.Services.Departments;
+﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Employees;
-using LinkDev.IKEA.DAL.Models.Common.Enums;
-using LinkDev.IKEA.PL.ViewModels.Departments;
 using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +10,7 @@ namespace LinkDev.IKEA.PL.Controllers
         IWebHostEnvironment env) : Controller
     {
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string Search)
         {
             // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
             // Helps to pass data from Controller [Action] to View
@@ -26,10 +22,16 @@ namespace LinkDev.IKEA.PL.Controllers
             ViewBag.Message = "Hello ViewBag";
 
 
-            var employees = employeeService.GetAllEmployees();
+            var employees = await employeeService.GetEmployeesAsync(Search);
             return View(employees);
         }
+        public async Task<IActionResult> Search(string Search)
+        {
+            var employees = await employeeService.GetEmployeesAsync(Search);
+            return PartialView("Partials/EmployeeListPartial", employees);
+        }
 
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -38,7 +40,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel employeeVM )
+        public async Task<IActionResult> Create(EmployeeViewModel employeeVM )
         {
             if (!ModelState.IsValid)
                 return View(employeeVM);
@@ -62,7 +64,7 @@ namespace LinkDev.IKEA.PL.Controllers
                     EmployeeType = employeeVM.EmployeeType,
                     DepartmentId = employeeVM.DepartmentId
                 };
-                var result = employeeService.CreateEmployee(CreatedEmployee);
+                var result = await employeeService.CreateEmployeeAsync(CreatedEmployee);
 
                 // 3. TempData : is a Property of type dictionary Object (Introduced in ASP.NET Framework 3.5)
                 // Helps to pass data netweem 2 consecutive requests
@@ -70,7 +72,8 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 if (result > 0)
                 {
-                    TempData["Message"] = "Employee is added successfully";
+                    message = "Employee is added successfully";
+                    TempData["Message"] = message;
                     TempData["Success"] = true;
                     return RedirectToAction("Index");
                 }
@@ -79,6 +82,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     TempData["Message"] = "Failed to add new employee";
                     TempData["Success"] = false;
                     message = "Failed to add new employee";
+                    TempData["Message"] = message;
+                    TempData["Success"] = false;
                     ModelState.AddModelError("", message);
                     return View(employeeVM);
                 }
@@ -97,32 +102,32 @@ namespace LinkDev.IKEA.PL.Controllers
             ModelState.AddModelError("", message);
             return View(employeeVM);
         }
+        #endregion
 
-        
-
+        #region Details
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var employee = employeeService.GetEmployee(id.Value);
+            var employee = await employeeService.GetEmployeeAsync(id.Value);
             if (employee is { })
                 return View(employee);
             return NotFound();
-        }
+        } 
+        #endregion
 
-
-
+        #region Update
         [HttpGet]
-        public IActionResult Update(int? id )
+        public async Task<IActionResult> Update(int? id )
         {
             if (id is null)
                 return BadRequest();
 
 
 
-            var employee = employeeService.GetEmployee(id.Value);
+            var employee = await employeeService.GetEmployeeAsync(id.Value);
 
             if (employee is { })
                 return View(new EmployeeViewModel
@@ -135,8 +140,6 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
-                    //Gender = (Gender) Enum.Parse(typeof(Gender) , employee.Gender),
-                    //EmployeeType = (EmpType) Enum.Parse(typeof(EmpType) , employee.EmployeeType)
 
                 }
                );
@@ -147,7 +150,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
+        public async Task<IActionResult> Update([FromRoute] int id, EmployeeViewModel employeeUpdateVM)
         {
             if (!ModelState.IsValid)
                 return View(employeeUpdateVM);
@@ -173,18 +176,21 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 };
 
-                var result = employeeService.UpdateEmployee(id, employee);
+                var result = await employeeService.UpdateEmployeeAsync(id, employee);
 
                 if (result > 0)
                 {
-                    TempData["Message"] = "Employee is updated successfully";
+                    message = "Department is updated successfully";
+                    TempData["Message"] = message;
                     TempData["Success"] = true;
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index");
                 }
 
                 TempData["Message"] = "Failed to update employee";
                 TempData["Success"] = false;
                 message = "Failed to update department";
+                TempData["Message"] = message;
+                TempData["Success"] = false;
             }
             catch (Exception ex)
             {
@@ -202,17 +208,17 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
 
-        }
-
+        } 
+        #endregion
 
         #region Delete Action
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var employee = employeeService.GetEmployee(id.Value);
+            var employee = await employeeService.GetEmployeeAsync(id.Value);
 
             if (employee is null)
                 return NotFound();
@@ -223,26 +229,31 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var message = string.Empty;
             try
             {
-                var deleted = employeeService.DeleteEmployee(id);
+                var deleted = await employeeService.DeleteEmployeeAsync(id);
 
                 if (deleted)
                 {
-                    TempData["Message"] = "Employee is deleted successfully";
+                    message = "Employee is deleted successfully";
+                    TempData["Message"] = message;
                     TempData["Success"] = true;
                     return RedirectToAction(nameof(Index));
-
-
                 }
+
+
+
 
                 TempData["Message"] = "Failed to delete employee";
                 TempData["Success"] = false;
                 message = "an error has occured during deleting the employee :(";
+                TempData["Message"] = message;
+                TempData["Success"] = false;
             }
+
             catch (Exception ex)
             {
 
@@ -257,7 +268,6 @@ namespace LinkDev.IKEA.PL.Controllers
             //ModelState.AddModelError(string.Empty, message);
             return RedirectToAction(nameof(Index));
 
-            #endregion
 
 
 
@@ -266,5 +276,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
         }
+        #endregion
+
     }
 }

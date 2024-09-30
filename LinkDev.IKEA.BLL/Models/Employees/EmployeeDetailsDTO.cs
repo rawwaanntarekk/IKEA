@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -45,5 +46,7 @@ namespace LinkDev.IKEA.BLL.Models.Employees
         public DateTime LastModifiedOn { get; set; }
 
         public string? Department { get; set; }
+        public string? Image { get; set; }
+
     }
 }

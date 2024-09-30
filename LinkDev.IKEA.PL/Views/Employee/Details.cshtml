@@ -5,6 +5,12 @@
 
 <h1>@Model.Name Details</h1>
 
+<div class="row align-items-center my-3">
+    <div class="col-2">
+        <img src="~/Assets/images/@Model.Image" class="circle" alt="Employee Image"/>
+    </div>
+</div>
+
 <!-- Bootstrap Tabs -->
 <ul class="nav nav-tabs mt-2" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
@@ -18,42 +24,42 @@
 <div class="tab-content" id="myTabContent">
     <!-- General Tab Content -->
     <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
-        <div class="row g-3 justify-content-center mt-3">
-            <div class="form-floating col-md-8 mb-3">
+        <div class="row g-3 justify-content-start mt-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Name" class="form-control" placeholder="Name" readonly>
                 <label asp-for="Name" class="formInput ms-2"></label>
             </div>
 
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Email" class="form-control" placeholder="Email" readonly>
                 <label asp-for="Email" class="formInput ms-2"></label>
             </div>
             
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Department" class="form-control" placeholder="Department" readonly>
                 <label asp-for="Department" class="formInput ms-2"></label>
             </div>
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Address" class="form-control" placeholder="Address" readonly>
                 <label asp-for="Address" class="formInput ms-2"></label>
             </div>
 
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Age" class="form-control" placeholder="Age" readonly>
                 <label asp-for="Age" class="formInput ms-2"></label>
             </div>
 
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Salary" class="form-control" placeholder="Salary" readonly>
                 <label asp-for="Salary" class="formInput ms-2"></label>
             </div>
 
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input asp-for="Phone" class="form-control" placeholder="Phone" readonly>
                 <label asp-for="Phone" class="formInput ms-2"></label>
             </div>
 
-            <div class="form-floating col-md-8 mb-3">
+            <div class="form-floating col-md-6 mb-3">
                 <input type="date" asp-for="HiringDate" class="form-control" placeholder="Hiring Date" readonly>
                 <label asp-for="HiringDate" class="formInput ms-2"></label>
             </div>
@@ -76,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-8 mb-3">
+            <div class="form-group col-md-12 mb-3">
                 <label asp-for="EmployeeType" class="form-label"></label>
                 <select disabled asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmpType>()" class="form-control">
                     <option value="">Select Employee Type</option>

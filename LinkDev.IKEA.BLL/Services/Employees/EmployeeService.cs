@@ -1,21 +1,66 @@
-﻿using LinkDev.IKEA.BLL.Models.Employees;
+﻿using LinkDev.IKEA.BLL.Common.Services.Attachments;
+using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.DAL.Models.Common.Enums;
-using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.DAL.Models.Employees;
-using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
+using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LinkDev.IKEA.BLL.Services.Employees
 {
-    public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployeeService
+    public class EmployeeService(IUnitOfWork _UnitOfWork,
+                                 IAttachmentService _attachmentService) : IEmployeeService
     {
-        public int CreateEmployee(CreatedEmployeeDTO employee)
+        public async Task<IEnumerable<EmployeeGeneralDTO>> GetEmployeesAsync(string Search)
         {
+            var employees = await (_UnitOfWork.EmployeeRepository
+                .GetIQueryable()
+                .Where(e => !e.IsDeleted && (string.IsNullOrEmpty(Search) || e.Name.ToLower().Contains(Search.ToLower())))
+                .Include(e => e.Department)
+                .Select(e => new EmployeeGeneralDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Age = e.Age,
+                    Salary = e.Salary,
+                    IsActive = e.IsActive,
+                    Email = e.Email,
+                    Gender = e.Gender.ToString(),
+                    EmployeeType = e.EmployeeType.ToString(),
+                    Department = e.Department != null ? e.Department.Name : "No Department",
+                    Image = e.ImageUrl
+                    
+                }).ToListAsync());
+                return  employees;
+
+        }
+        public async Task<EmployeeDetailsDTO?> GetEmployeeAsync(int id)
+        {
+            var employee =await  _UnitOfWork.EmployeeRepository.GetAsync(id);
+            if (employee is { })
+                return new EmployeeDetailsDTO
+                {
+                    Id = employee.Id,
+                    Name = employee.Name,
+                    Address = employee.Address,
+                    Age = employee.Age,
+                    Salary = employee.Salary,
+                    IsActive = employee.IsActive,
+                    Email = employee.Email,
+                    Phone = employee.PhoneNumber,
+                    HiringDate = employee.HiringDate,
+                    Gender = nameof(employee.Gender),
+                    EmployeeType = nameof(employee.EmployeeType),
+                    Department = employee.Department?.Name,
+                    Image = employee.ImageUrl
+                };
+
+            return null;
+
+        }
+        public async Task<int> CreateEmployeeAsync(CreatedEmployeeDTO employee)
+        {
+            
             var CreatedEmployee = new Employee
             {
                 Name = employee.Name,
@@ -32,71 +77,20 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 CreatedOn = DateTime.UtcNow,
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
-                DepartmentId = employee.DepartmentId
+                DepartmentId = employee.DepartmentId,                
             };
 
-            return employeeRepository.Add(CreatedEmployee);
+            if (employee.Image is not null)
+                CreatedEmployee.ImageUrl =await _attachmentService.UploadAsync(employee.Image, "images");
+
+
+            _UnitOfWork.EmployeeRepository.Add(CreatedEmployee);
+
+            return await _UnitOfWork.CompleteAsync();
         }
-
-        public bool DeleteEmployee(int id)
+        public async Task<int> UpdateEmployeeAsync(int id , UpdatedEmployeeDTO employee)
         {
-           var employee = employeeRepository.Get(id);
-           if (employee is { })
-                return employeeRepository.Delete(employee) > 0;
-           return false;
-
-
-        }
-
-        public IEnumerable<EmployeeGeneralDTO> GetAllEmployees()
-        {
-            var employee = employeeRepository
-                .GetIQueryable()
-                .Where(e => !e.IsDeleted)
-                .Include(e => e.Department)
-            .Select(e => new EmployeeGeneralDTO
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Age = e.Age,
-                Salary = e.Salary,
-                IsActive = e.IsActive,
-                Email = e.Email,
-                Gender = e.Gender.ToString(),
-                EmployeeType = e.EmployeeType.ToString(),
-                Department = e.Department != null ? e.Department.Name : "No Department"
-            }).ToList();
-            return employee;
-
-        }
-
-        public EmployeeDetailsDTO? GetEmployee(int id)
-        {
-            var employee = employeeRepository.Get(id);
-            if (employee is { })
-                return new EmployeeDetailsDTO
-                {
-                    Id = employee.Id,
-                    Name = employee.Name,
-                    Address = employee.Address,
-                    Age = employee.Age,
-                    Salary = employee.Salary,
-                    IsActive = employee.IsActive,
-                    Email = employee.Email,
-                    Phone = employee.PhoneNumber,
-                    HiringDate = employee.HiringDate,
-                    Gender = nameof(employee.Gender),
-                    EmployeeType = nameof(employee.EmployeeType),
-                    Department = employee.Department?.Name
-                };
-
-            return null;
-
-        }
-
-        public int UpdateEmployee(int id, UpdatedEmployeeDTO employee)
-        {
-            var CreatedEmployee = new Employee
+            var employeeToUpdate = new Employee
             {
                 Id = id,
                 Name = employee.Name,
@@ -113,9 +107,31 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
                 DepartmentId = employee.DepartmentId
-                
+
             };
-            return employeeRepository.Update(CreatedEmployee);
+
+            _UnitOfWork.EmployeeRepository.Update(employeeToUpdate);
+
+            return await _UnitOfWork.CompleteAsync();
+           
         }
+        public async Task<bool> DeleteEmployeeAsync(int id)
+        {
+           var employeeRepo = _UnitOfWork.EmployeeRepository;
+           var employee = await employeeRepo.GetAsync(id);
+           if (employee is { })
+                employeeRepo.Delete(employee);
+
+            return await  _UnitOfWork.CompleteAsync() > 0;
+         
+
+
+        }
+
+       
+
+       
+
+       
     }
 }

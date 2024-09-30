@@ -1,16 +1,11 @@
 ﻿using LinkDev.IKEA.DAL.Models.Departments;
+using LinkDev.IKEA.DAL.Persistance.Repositotries._Generic;
 
 
 namespace LinkDev.IKEA.DAL.Persistance.Repositotries.Departments
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository : IGenericRepository<Department>
     {
-        public Department? Get(int id);
-        public IEnumerable<Department> GetAll(bool withAsNoTracking = true);
-        public IQueryable<Department> GetAllAsIQueryable();
-        public int Add(Department entity);
-        public int Update(Department entity);
-        public int Delete(int id);
 
     }
 }
