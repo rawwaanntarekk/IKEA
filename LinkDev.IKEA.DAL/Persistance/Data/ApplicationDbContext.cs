@@ -1,12 +1,13 @@
 ﻿using LinkDev.IKEA.DAL.Models.Departments;
 using LinkDev.IKEA.DAL.Models.Employees;
+using LinkDev.IKEA.DAL.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace LinkDev.IKEA.DAL.Persistance.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

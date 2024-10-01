@@ -1,9 +1,9 @@
 ﻿var searchInput = $("#searchInput");
 var table = $("table");
-searchInput.on("keyup", function (event) {
+searchInput.on("keyup", function (event, name = "Employee") {
     var searchValue = searchInput.val();
     $.ajax({
-        url: `/${(this).data(model)}/Search`,
+        url: `/${name}/Search`,
         type: "GET",
         data: { search: searchValue },
         success: function (response) {

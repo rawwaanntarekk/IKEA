@@ -23,7 +23,7 @@ namespace LinkDev.IKEA.PL.Controllers
         public async Task<IActionResult> Search(string search)
         {
             var departments = await departmentService.GetDepartmentsAsync(search);
-            return PartialView("Partials/EmployeeListPartial" , departments);
+            return PartialView("Partials/DepartmentListPartial" , departments);
         }
 
         [HttpGet]
