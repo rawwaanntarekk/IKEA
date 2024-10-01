@@ -1,10 +1,12 @@
 ﻿using LinkDev.IKEA.DAL.Models.Identity;
 using LinkDev.IKEA.PL.ViewModels.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
+    
     public class AccountController(UserManager<ApplicationUser> _userManager,
         SignInManager<ApplicationUser> _signInManager) : Controller
     {

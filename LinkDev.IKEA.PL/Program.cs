@@ -78,12 +78,19 @@ namespace LinkDev.IKEA.PL
             // Add Identity stores to the dependency injection container.
             }).AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-
-
-
-
-
+            // Configure default application scheme
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/SignIn";
+                options.AccessDeniedPath = "/Home/Error";
+                // Security token lifetime
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+            });
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Identity.Application";
+                options.DefaultChallengeScheme = "Identity.Application";
+            });
 
             #endregion
 
@@ -104,6 +111,7 @@ namespace LinkDev.IKEA.PL
             // check the path follows which controller and action in the application
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

@@ -1,10 +1,12 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.PL.ViewModels.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController(IEmployeeService employeeService,
         ILogger<EmployeeController> logger,
         IWebHostEnvironment env) : Controller

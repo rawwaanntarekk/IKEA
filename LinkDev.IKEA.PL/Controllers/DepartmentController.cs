@@ -2,12 +2,14 @@
 using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.PL.ViewModels.Departments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
     // DepartmentController is a controller [Inheritance]
     // DepartmentController has a IDepartmentService [Composition]
+    [Authorize]
     public class DepartmentController(IDepartmentService departmentService,
         ILogger<DepartmentController> logger,
         IWebHostEnvironment env,
