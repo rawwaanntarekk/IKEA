@@ -9,7 +9,8 @@
 		<h1>Creative SignUp Form</h1>
 		<div class="main-agileinfo">
 			<div class="agileits-top">
-				<form asp-action="SignUp" method="post">
+				<form asp-action="SignIn" method="post">
+					<div asp-validation-summary="ModelOnly"></div>
 					<input class="text " asp-for="FirstName" placeholder="First Name" required="">
 					<input class="text " asp-for="LastName" placeholder="Last Name" required="">
 					<input class="text" asp-for="UserName" placeholder="Username" required="">
@@ -25,6 +26,10 @@
 					</div>
 					<input type="submit" value="SIGNUP">
 				</form>
-				<p>Don't have an Account? <a href="#"> Login Now!</a></p>
+				<p>Already have an account? <a href="#"> Login Now!</a></p>
 			</div>
 		</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial"/>
+}

@@ -52,6 +52,48 @@ namespace LinkDev.IKEA.PL.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInViewModel model)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest();
+
+			var user = await _userManager.FindByEmailAsync(model.Email);
+			if (user is { })
+			{
+				var flag = await _userManager.CheckPasswordAsync(user, model.Password);
+                if (flag)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
+                    if (result.IsNotAllowed)
+                        ModelState.AddModelError(string.Empty, "User is not allowed to sign in");
+
+                    if (result.IsLockedOut)
+                        ModelState.AddModelError(string.Empty, "User is locked out");
+
+
+
+                    if (result.Succeeded)
+                        return RedirectToAction(nameof(HomeController.Index), "Home");
+
+
+                    
+
+                }
+			}
+
+             ModelState.AddModelError(string.Empty, "Invalid Email or Password");
+            return View(model);
+
+		
+		}
+
 
 
 
