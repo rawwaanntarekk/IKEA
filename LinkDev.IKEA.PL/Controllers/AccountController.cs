@@ -96,6 +96,13 @@ namespace LinkDev.IKEA.PL.Controllers
 		
 		}
 
+        // The redirected action is not specified 
+        // As in the default scheme configuration we defined the LogoutPath as [/Account/SignOut]
+        public async new Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(SignIn));
+        }
 
 
 
