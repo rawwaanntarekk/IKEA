@@ -1,10 +1,12 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.PL.ViewModels.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController(IEmployeeService employeeService,
         ILogger<EmployeeController> logger,
         IWebHostEnvironment env) : Controller
@@ -140,7 +142,10 @@ namespace LinkDev.IKEA.PL.Controllers
                     Salary = employee.Salary,
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
-
+                    EmployeeType = employee.EmployeeType,
+                    Gender = employee.Gender
+                    
+                    
                 }
                );
 
@@ -172,6 +177,7 @@ namespace LinkDev.IKEA.PL.Controllers
                     HiringDate = employeeUpdateVM.HiringDate,
                     Gender = employeeUpdateVM.Gender,
                     EmployeeType = employeeUpdateVM.EmployeeType,
+                    DepartmentId = employeeUpdateVM.DepartmentId
 
 
                 };
@@ -180,15 +186,14 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 if (result > 0)
                 {
-                    message = "Department is updated successfully";
+                    message = "Employee information is updated successfully";
                     TempData["Message"] = message;
                     TempData["Success"] = true;
                     return RedirectToAction("Index");
                 }
 
-                TempData["Message"] = "Failed to update employee";
-                TempData["Success"] = false;
-                message = "Failed to update department";
+   
+                message = "Failed to update employee";
                 TempData["Message"] = message;
                 TempData["Success"] = false;
             }

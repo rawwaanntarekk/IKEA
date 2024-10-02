@@ -2,11 +2,13 @@ using LinkDev.IKEA.BLL.Common.Services.Attachments;
 using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.DAL.Models.Departments;
+using LinkDev.IKEA.DAL.Models.Identity;
 using LinkDev.IKEA.DAL.Persistance.Data;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
 using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
 using LinkDev.IKEA.PL.Mapping;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -38,7 +40,7 @@ namespace LinkDev.IKEA.PL
             {
                 options.UseLazyLoadingProxies()
                        .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-                
+
             });
 
             //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
@@ -56,8 +58,39 @@ namespace LinkDev.IKEA.PL
             // =
             builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
 
+            // Adds the default identity system configuration for the specified User and Role types.
+            // Register main 3 services : {userManager, signInManager, roleManager}
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>((options) =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = true;
+
+                options.User.RequireUniqueEmail = true;
+
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 
 
+            // Add Identity stores to the dependency injection container.
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Configure default application scheme
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/SignIn";
+                options.AccessDeniedPath = "/Home/Error";
+                // Security token lifetime
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+            });
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Identity.Application";
+                options.DefaultChallengeScheme = "Identity.Application";
+            });
 
             #endregion
 
@@ -78,6 +111,7 @@ namespace LinkDev.IKEA.PL
             // check the path follows which controller and action in the application
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

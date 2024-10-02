@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LinkDev.IKEA.DAL.Models.Common.Enums;
+using LinkDev.IKEA.DAL.Models.Departments;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,18 +37,19 @@ namespace LinkDev.IKEA.BLL.Models.Employees
 
         [Display(Name = "Hiring Date")]
         public DateOnly HiringDate { get; set; }
-        public string Gender { get; set; } = null!;
+        public Gender Gender { get; set; }
 
-        [Display(Name = "Employee Type")]
-        public string EmployeeType { get; set; } = null!;
+        //[Display(Name = "Employee Type")]
+        //public string EmployeeType { get; set; } = null!;
 
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public int LastModifiedBy { get; set; }
         public DateTime LastModifiedOn { get; set; }
-
         public string? Department { get; set; }
+        public EmpType EmployeeType { get; set; }
         public string? Image { get; set; }
+
 
     }
 }

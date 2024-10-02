@@ -49,8 +49,8 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     Email = employee.Email,
                     Phone = employee.PhoneNumber,
                     HiringDate = employee.HiringDate,
-                    Gender = nameof(employee.Gender),
-                    EmployeeType = nameof(employee.EmployeeType),
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
                     Department = employee.Department?.Name,
                     Image = employee.ImageUrl
                 };

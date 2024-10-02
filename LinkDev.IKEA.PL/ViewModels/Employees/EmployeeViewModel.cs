@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Models.Common.Enums;
+using LinkDev.IKEA.DAL.Models.Departments;
 using System.ComponentModel.DataAnnotations;
 
 namespace LinkDev.IKEA.PL.ViewModels.Employees
