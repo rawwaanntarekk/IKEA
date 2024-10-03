@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Authorization;
@@ -127,8 +128,6 @@ namespace LinkDev.IKEA.PL.Controllers
             if (id is null)
                 return BadRequest();
 
-
-
             var employee = await employeeService.GetEmployeeAsync(id.Value);
 
             if (employee is { })
@@ -143,9 +142,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
                     EmployeeType = employee.EmployeeType,
-                    Gender = employee.Gender
-                    
-                    
+                    Gender = employee.Gender,
+                    DepartmentId = employee.Department.Id,
                 }
                );
 

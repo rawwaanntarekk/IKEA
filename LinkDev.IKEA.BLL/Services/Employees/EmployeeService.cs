@@ -51,7 +51,7 @@ namespace LinkDev.IKEA.BLL.Services.Employees
                     HiringDate = employee.HiringDate,
                     Gender = employee.Gender,
                     EmployeeType = employee.EmployeeType,
-                    Department = employee.Department?.Name,
+                    Department = employee.Department!,
                     Image = employee.ImageUrl
                 };
 

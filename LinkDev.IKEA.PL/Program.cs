@@ -25,17 +25,6 @@ namespace LinkDev.IKEA.PL
             // Add services to the container. 
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddScoped<ApplicationDbContext>();
-            //IServiceCollection serviceCollection = builder.Services.AddScoped<DbContextOptions<ApplicationDbContext>>((ServiceProvider) =>
-            //{
-            //    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            //    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-            //    var options = optionsBuilder.Options;
-
-            //    return options;
-            //});
-
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseLazyLoadingProxies()
@@ -43,20 +32,12 @@ namespace LinkDev.IKEA.PL
 
             });
 
-            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
 
-            //builder.Services.AddAutoMapper(typeof(MappingProfile));
-            //// =
-            //builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
-            // =
-            builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
 
             // Adds the default identity system configuration for the specified User and Role types.
             // Register main 3 services : {userManager, signInManager, roleManager}
@@ -85,6 +66,7 @@ namespace LinkDev.IKEA.PL
                 options.AccessDeniedPath = "/Home/Error";
                 // Security token lifetime
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.LogoutPath = "/Account/SignOut";
             });
             builder.Services.AddAuthentication(options =>
             {

@@ -24,7 +24,7 @@ namespace LinkDev.IKEA.DAL.Models.Employees
 
         // Navigational Property One
         public virtual Department? Department { get; set; }
-        public string? ImageUrl { get; set; }
+        public string? ImageUrl{ get; set; }
 
 
 
