@@ -18,8 +18,12 @@ namespace LinkDev.IKEA.PL.Helpers
 
             mail.To.Add(MailboxAddress.Parse(email.To));
             mail.From.Add(new MailboxAddress(options.Value.DisplayName, options.Value.Email));
-            var builder = new BodyBuilder();
-            builder.TextBody = email.Body;
+
+            var builder = new BodyBuilder
+            {
+                TextBody = email.Body
+            };
+
             mail.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
             smtp.Connect(options.Value.Host, options.Value.Port, MailKit.Security.SecureSocketOptions.StartTls);

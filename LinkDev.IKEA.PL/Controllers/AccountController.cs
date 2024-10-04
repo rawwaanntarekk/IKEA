@@ -1,13 +1,14 @@
 ﻿using LinkDev.IKEA.DAL.Models.Identity;
+using LinkDev.IKEA.DAL.Models.Mails;
 using LinkDev.IKEA.PL.Helpers;
+using LinkDev.IKEA.PL.ViewModels.Accounts;
 using LinkDev.IKEA.PL.ViewModels.Identity;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA.PL.Controllers
 {
-    
+
     public class AccountController(UserManager<ApplicationUser> _userManager,
         SignInManager<ApplicationUser> _signInManager,
         IMailSettings settings) : Controller
@@ -74,7 +75,7 @@ namespace LinkDev.IKEA.PL.Controllers
 				var flag = await _userManager.CheckPasswordAsync(user, model.Password);
                 if (flag)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe , true);
                     if (result.IsNotAllowed)
                         ModelState.AddModelError(string.Empty, "User is not allowed to sign in");
 
@@ -106,6 +107,53 @@ namespace LinkDev.IKEA.PL.Controllers
 
 
 
+
+
         #endregion
+
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is not null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var url = Url.Action(nameof(ResetPassword), nameof(AccountController), new
+                {
+                    mail = model.Email,
+                    Token = token,
+                }, Request.Scheme);
+
+                var mail = new Email
+                {
+                    To = model.Email,
+                    Subject = "Reset Password",
+                    Body = $"Please reset your password by clicking <a href='{url}'>here</a>"
+                };
+
+                settings.SendEmail(mail);
+            }
+			return RedirectToAction(nameof(SignIn));
+
+		}
+
+		public async Task<IActionResult> ResetPassword()
+        {
+            return View();
+        }
+
+
+
     }
 }
