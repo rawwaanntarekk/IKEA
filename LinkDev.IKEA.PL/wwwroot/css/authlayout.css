@@ -17,6 +17,15 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
     display: block;
 }
+:root{
+    --main-white: #fff;
+    --main-black: black;
+}
+
+body {
+    background: var(--main-black) !important;
+    font-family: 'Roboto', sans-serif;
+}
 
 ol, ul {
     list-style: none;
@@ -112,17 +121,7 @@ img {
 }
 
 /*-- end reset --*/
-body {
-    background: #76b852;
-    /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #76b852, #8DC26F);
-    background: -moz-linear-gradient(to top, #76b852, #8DC26F);
-    background: -o-linear-gradient(to top, #76b852, #8DC26F);
-    background: linear-gradient(to top, #76b852, #8DC26F);
-    background-size: cover;
-    background-attachment: fixed;
-    font-family: 'Roboto', sans-serif;
-}
+
 
 h1 {
     font-size: 3em;
@@ -212,10 +211,10 @@ input.email, input.text {
 
 input[type="submit"] {
     font-size: .9em;
-    color: #fff;
-    background: #76b852;
+    color: var(--main-white);
+    background-color: transparent;
     outline: none;
-    border: 1px solid #76b852;
+    border: 1px solid var(--main-white);
     cursor: pointer;
     padding: 0.9em;
     -webkit-appearance: none;
@@ -230,7 +229,8 @@ input[type="submit"] {
         -o-transition: .5s all;
         -ms-transition: .5s all;
         transition: .5s all;
-        background: #8DC26F;
+        background-color : var(--main-white);
+        color: var(--main-black);
     }
 
 .agileits-top p {
@@ -247,10 +247,12 @@ input[type="submit"] {
         -moz-transition: .5s all;
         transition: .5s all;
         font-weight: 400;
+        display: inline-block; 
+        margin-left: 5px;
     }
 
         .agileits-top p a:hover {
-            color: #76b852;
+            transform : scale(1.1);
         }
 
 /*-- //main --*/
@@ -264,7 +266,7 @@ input[type="submit"] {
 }
 
 input.checkbox {
-    background: #8DC26F;
+    background: var(--main-black);
     cursor: pointer;
     width: 1.2em;
     height: 1.2em;
@@ -301,7 +303,7 @@ input.checkbox {
         -ms-transform: rotate(-45deg);
         transform: rotate(-45deg);
         height: .5rem;
-        border-color: #fff;
+        border-color: var(--main-black);
         border-top-color: transparent;
         border-right-color: transparent;
     }

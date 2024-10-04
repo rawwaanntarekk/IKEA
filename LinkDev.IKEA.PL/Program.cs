@@ -7,7 +7,9 @@ using LinkDev.IKEA.DAL.Persistance.Data;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
 using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
+using LinkDev.IKEA.PL.Helpers;
 using LinkDev.IKEA.PL.Mapping;
+using LinkDev.IKEA.PL.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -37,6 +39,7 @@ namespace LinkDev.IKEA.PL
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
+            builder.Services.AddTransient<IMailSettings, MailSettings>();
 
 
             // Adds the default identity system configuration for the specified User and Role types.
@@ -74,6 +77,7 @@ namespace LinkDev.IKEA.PL
                 options.DefaultChallengeScheme = "Identity.Application";
             });
 
+            builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
             #endregion
 
             var app = builder.Build();

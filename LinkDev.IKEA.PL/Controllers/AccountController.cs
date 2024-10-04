@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.DAL.Models.Identity;
+using LinkDev.IKEA.PL.Helpers;
 using LinkDev.IKEA.PL.ViewModels.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,8 @@ namespace LinkDev.IKEA.PL.Controllers
 {
     
     public class AccountController(UserManager<ApplicationUser> _userManager,
-        SignInManager<ApplicationUser> _signInManager) : Controller
+        SignInManager<ApplicationUser> _signInManager,
+        IMailSettings settings) : Controller
     {
         #region Sign Up
 
@@ -101,6 +103,8 @@ namespace LinkDev.IKEA.PL.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(SignIn));
         }
+
+
 
         #endregion
     }
