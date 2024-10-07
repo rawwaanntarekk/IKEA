@@ -60,7 +60,9 @@ namespace LinkDev.IKEA.PL
 
 
             // Add Identity stores to the dependency injection container.
-            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             // Configure default application scheme
             builder.Services.ConfigureApplicationCookie(options =>

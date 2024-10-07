@@ -1,6 +1,7 @@
 ﻿using LinkDev.IKEA.DAL.Models.Identity;
 using LinkDev.IKEA.DAL.Models.Mails;
 using LinkDev.IKEA.PL.Helpers;
+using LinkDev.IKEA.PL.ViewModels;
 using LinkDev.IKEA.PL.ViewModels.Accounts;
 using LinkDev.IKEA.PL.ViewModels.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LinkDev.IKEA.PL.Controllers
 {
 
-    public class AccountController(UserManager<ApplicationUser> _userManager,
+	public class AccountController(UserManager<ApplicationUser> _userManager,
         SignInManager<ApplicationUser> _signInManager,
         IMailSettings settings) : Controller
     {
@@ -57,6 +58,10 @@ namespace LinkDev.IKEA.PL.Controllers
 
         }
 
+        #endregion
+
+        #region Sign In
+
         [HttpGet]
         public IActionResult SignIn()
         {
@@ -65,17 +70,17 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInViewModel model)
-		{
-			if (!ModelState.IsValid)
-				return BadRequest();
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
 
-			var user = await _userManager.FindByEmailAsync(model.Email);
-			if (user is { })
-			{
-				var flag = await _userManager.CheckPasswordAsync(user, model.Password);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user is { })
+            {
+                var flag = await _userManager.CheckPasswordAsync(user, model.Password);
                 if (flag)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe , true);
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, true);
                     if (result.IsNotAllowed)
                         ModelState.AddModelError(string.Empty, "User is not allowed to sign in");
 
@@ -88,16 +93,17 @@ namespace LinkDev.IKEA.PL.Controllers
                         return RedirectToAction(nameof(HomeController.Index), "Home");
 
 
-                    
+
 
                 }
-			}
+            }
 
-             ModelState.AddModelError(string.Empty, "Invalid Email or Password");
+            ModelState.AddModelError(string.Empty, "Invalid Email or Password");
             return View(model);
 
-		
-		}
+
+        } 
+        #endregion
 
         public async new Task<IActionResult> SignOut()
         {
@@ -105,11 +111,7 @@ namespace LinkDev.IKEA.PL.Controllers
             return RedirectToAction(nameof(SignIn));
         }
 
-
-
-
-
-        #endregion
+        #region Forget Password
 
         [HttpGet]
         public IActionResult ForgetPassword()
@@ -125,14 +127,14 @@ namespace LinkDev.IKEA.PL.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
 
-            if (user is not null)
+            if (user is { })
             {
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var Token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                var url = Url.Action(nameof(ResetPassword), nameof(AccountController), new
+                var url = Url.Action(nameof(ResetPassword), "Account", new
                 {
-                    mail = model.Email,
-                    Token = token,
+                    model.Email,
+                    Token
                 }, Request.Scheme);
 
                 var mail = new Email
@@ -144,14 +146,38 @@ namespace LinkDev.IKEA.PL.Controllers
 
                 settings.SendEmail(mail);
             }
-			return RedirectToAction(nameof(SignIn));
+            return RedirectToAction(nameof(SignIn));
 
-		}
+        }
+        #endregion
 
-		public async Task<IActionResult> ResetPassword()
+        #region Reset Password
+        [HttpGet]
+        public IActionResult ResetPassword(string Email, string Token)
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is { })
+            {
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+
+                if (result.Succeeded)
+                    return RedirectToAction(nameof(SignIn));
+            }
+
+            return View(model);
+
+        } 
+        #endregion
 
 
 
