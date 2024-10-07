@@ -146,7 +146,7 @@ h1 {
 }
 
 .agileits-top {
-    padding: 3em;
+    padding: 2em;
 }
 
 input[type="text"], input[type="email"], input[type="password"], #FirstName, #LastName {
@@ -219,7 +219,7 @@ input[type="submit"] {
     padding: 0.9em;
     -webkit-appearance: none;
     width: 100%;
-    margin: 2em 0;
+    margin: 2em 0 1em;
     letter-spacing: 4px;
 }
 
@@ -236,8 +236,8 @@ input[type="submit"] {
 .agileits-top p {
     font-size: 1em;
     color: #fff;
-    text-align: center;
-    letter-spacing: 1px;
+/*    text-align: center;
+*/    letter-spacing: 1px;
     font-weight: 300;
 }
 
@@ -248,7 +248,7 @@ input[type="submit"] {
         transition: .5s all;
         font-weight: 400;
         display: inline-block; 
-        margin-left: 5px;
+        margin-left: 10px;
     }
 
         .agileits-top p a:hover {
@@ -625,7 +625,7 @@ input.checkbox {
     }
 
     input[type="submit"] {
-        margin: 2em 0;
+        margin: 2em 0 1em;
     }
 
     h1 {
@@ -766,4 +766,8 @@ input.checkbox {
     .main-w3layouts {
         padding: 1em 0 0;
     }
+}
+#google {
+    width:30px;
+    /*margin-top:10px;*/
 }
