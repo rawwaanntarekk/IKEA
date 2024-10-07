@@ -137,11 +137,23 @@ namespace LinkDev.IKEA.PL.Controllers
                     Token
                 }, Request.Scheme);
 
-                var mail = new Email
+				var emailBody = $@"
+                                <div style='font-family: Arial, sans-serif; font-size:15px;'>
+                                    <p>Hello,</p>
+                                    <p>You requested a password reset. Please click the button below to reset your password:</p>
+                                    <p>
+                                        <a href='{url}' class='btn btn-primary' style='display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #007bff; border-color: #007bff; text-align: center; text-decoration: none; border-radius: 4px;'>Reset Password</a>
+                                    </p>
+                                    <p>If you did not request a password reset, please ignore this email.</p>
+                                    <p>Thank you,</p>
+                                    <p>IKEA</p>
+                                </div>";
+
+				var mail = new Email
                 {
                     To = model.Email,
                     Subject = "Reset Password",
-                    Body = $"Please reset your password by clicking <a href='{url}'>here</a>"
+                    Body = emailBody
                 };
 
                 settings.SendEmail(mail);

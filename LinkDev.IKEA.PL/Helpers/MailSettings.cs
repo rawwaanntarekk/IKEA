@@ -13,7 +13,8 @@ namespace LinkDev.IKEA.PL.Helpers
             var mail = new MimeMessage
             {
                 Sender = MailboxAddress.Parse(options.Value.Email),
-                Subject = email.Subject
+                Subject = email.Subject,
+                 
             };
 
             mail.To.Add(MailboxAddress.Parse(email.To));
@@ -21,7 +22,7 @@ namespace LinkDev.IKEA.PL.Helpers
 
             var builder = new BodyBuilder
             {
-                TextBody = email.Body
+                HtmlBody = email.Body
             };
 
             mail.Body = builder.ToMessageBody();
