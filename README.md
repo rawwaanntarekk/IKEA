@@ -100,35 +100,6 @@
     <li>Bootstrap</li>
 </ul>
 
-<h2 id="installation">Installation</h2>
-<ol>
-    <li>Clone the repository:
-        <pre><code>git clone https://github.com/rawwaanntarekk/IKEA.git</code></pre>
-    </li>
-    <li>Navigate to the project directory:
-        <pre><code>cd IKEA</code></pre>
-    </li>
-    <li>Install the dependencies:
-        <pre><code>dotnet restore</code></pre>
-    </li>
-</ol>
-
-<h2 id="usage">Usage</h2>
-<ol>
-    <li>Update the database connection string in <code>appsettings.json</code>.</li>
-    <li>Run the migrations to create the database:
-        <pre><code>dotnet ef database update</code></pre>
-    </li>
-    <li>Start the application:
-        <pre><code>dotnet run</code></pre>
-    </li>
-</ol>
-
-<h2 id="contributing">Contributing</h2>
-<p>Contributions are welcome! Please read the <code>contributing guidelines</code> before submitting a pull request.</p>
-
-<h2 id="license">License</h2>
-<p>This project is licensed under the MIT License.</p>
 
 </body>
 </html>
