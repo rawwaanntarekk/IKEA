@@ -197,7 +197,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var message = string.Empty;
             try
