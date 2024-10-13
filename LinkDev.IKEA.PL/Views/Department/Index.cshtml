@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Index";
     ViewData["Model"] = "Department";
+    var controllerName = ViewContext?.RouteData?.Values["controller"]?.ToString();
+
 }
 
 
@@ -16,17 +18,16 @@
     </div>
 
 
-    <form asp-action="Search" method="Get">
-        <div class="row col-md-8 justify-conetent-center align-items-center">
+    <form asp-action="Index" method="Get">
+        <div class="m-auto row col-md-8 justify-content-center align-items-center">
             <div class="col-md-8">
-                <input type="text" class="form-control" id="searchInput" name="search" data-model = "@ViewBag.Model" placeholder="Search">
+                <input type="text" id="searchInput" name="search" placeholder="Search..." class="form-control my-3" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <button type="submit" class="btn btn-dark">Search</button>
             </div>
 
         </div>
-
     </form>
 
 
@@ -42,3 +43,7 @@
             </div>
     }
 </div>
+
+<script>
+    var controllerName = '@controllerName';
+</script>

@@ -27,7 +27,7 @@ namespace LinkDev.IKEA.PL.Helpers
 
             mail.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
-            smtp.Connect(options.Value.Host, options.Value.Port, MailKit.Security.SecureSocketOptions.StartTls);
+            smtp.Connect(options.Value.Host, options.Value.Port, MailKit.Security.SecureSocketOptions.Auto);
             smtp.Authenticate(options.Value.Email, options.Value.Password);
             smtp.Send(mail);
             smtp.Disconnect(true);

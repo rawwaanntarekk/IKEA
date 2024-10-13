@@ -15,19 +15,10 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string Search)
         {
-            // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
-            // Helps to pass data from Controller [Action] to View
-            ViewData["Message"] = "Hello ViweData";
-
-            // ViewBag is a Dynamic Property (Introduced in ASP.NET Framework 4.0)
-            // Helps to pass data from Controller [Action] to View
-
-            ViewBag.Message = "Hello ViewBag";
-
-
             var employees = await employeeService.GetEmployeesAsync(Search);
             return View(employees);
         }
+
         public async Task<IActionResult> Search(string Search)
         {
             var employees = await employeeService.GetEmployeesAsync(Search);

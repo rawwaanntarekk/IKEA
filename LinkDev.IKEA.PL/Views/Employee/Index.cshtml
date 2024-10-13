@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Employees";
+    var controllerName = ViewContext?.RouteData?.Values["controller"]?.ToString();
 
     // Compiler Enforce type safety
     string? viewDataMessage = ViewData["Message"] as string;
@@ -44,6 +45,10 @@
             </div>
     }
 </div>
+
+<script>
+    var controllerName = '@controllerName';
+</script>
 
 
 
