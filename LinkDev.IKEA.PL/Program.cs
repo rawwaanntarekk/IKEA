@@ -7,7 +7,10 @@ using LinkDev.IKEA.DAL.Persistance.Data;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Departments;
 using LinkDev.IKEA.DAL.Persistance.Repositotries.Employees;
 using LinkDev.IKEA.DAL.Persistance.UnitOfWork;
+using LinkDev.IKEA.PL.Helpers;
 using LinkDev.IKEA.PL.Mapping;
+using LinkDev.IKEA.PL.Settings;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -25,17 +28,6 @@ namespace LinkDev.IKEA.PL
             // Add services to the container. 
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddScoped<ApplicationDbContext>();
-            //IServiceCollection serviceCollection = builder.Services.AddScoped<DbContextOptions<ApplicationDbContext>>((ServiceProvider) =>
-            //{
-            //    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            //    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-            //    var options = optionsBuilder.Options;
-
-            //    return options;
-            //});
-
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseLazyLoadingProxies()
@@ -43,20 +35,13 @@ namespace LinkDev.IKEA.PL
 
             });
 
-            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddTransient<IAttachmentService, AttachmentService>();
+            builder.Services.AddTransient<IMailSettings, MailSettings>();
 
-            //builder.Services.AddAutoMapper(typeof(MappingProfile));
-            //// =
-            //builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
-            // =
-            builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
 
             // Adds the default identity system configuration for the specified User and Role types.
             // Register main 3 services : {userManager, signInManager, roleManager}
@@ -76,7 +61,9 @@ namespace LinkDev.IKEA.PL
 
 
             // Add Identity stores to the dependency injection container.
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             // Configure default application scheme
             builder.Services.ConfigureApplicationCookie(options =>
@@ -85,13 +72,25 @@ namespace LinkDev.IKEA.PL
                 options.AccessDeniedPath = "/Home/Error";
                 // Security token lifetime
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
-            });
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = "Identity.Application";
-                options.DefaultChallengeScheme = "Identity.Application";
+                options.LogoutPath = "/Account/SignOut";
             });
 
+
+			builder.Services.AddAuthentication(options =>
+			{
+				// Set the default authentication scheme
+				options.DefaultAuthenticateScheme = "Identity.Application";
+				options.DefaultChallengeScheme = "Identity.Application";
+			})
+            .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+            {
+	            IConfiguration googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+	            options.ClientId = googleAuthSection["ClientId"]!;
+	            options.ClientSecret = googleAuthSection["ClientSecret"]!;
+            });
+
+
+			builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
             #endregion
 
             var app = builder.Build();

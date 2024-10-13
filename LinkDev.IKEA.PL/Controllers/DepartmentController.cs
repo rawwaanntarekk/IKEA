@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LinkDev.IKEA.BLL.Models;
+﻿using LinkDev.IKEA.BLL.Models;
 using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +11,8 @@ namespace LinkDev.IKEA.PL.Controllers
     [Authorize]
     public class DepartmentController(IDepartmentService departmentService,
         ILogger<DepartmentController> logger,
-        IWebHostEnvironment env,
-        IMapper _mapper) : Controller
+        IWebHostEnvironment env
+      ) : Controller
     {
         [HttpGet]
         public async Task<IActionResult> Index(string search)
@@ -47,17 +46,16 @@ namespace LinkDev.IKEA.PL.Controllers
 
             try
             {
-                //var createdDepartment = new CreatedDepartmentDTO()
-                //{
-                  
-                //    Code = departmentVM.Code,
-                //    Name = departmentVM.Name,
-                //    Description = departmentVM.Description,
-                //    CreationDate = departmentVM.CreationDate,
+                var createdDepartment = new CreatedDepartmentDTO()
+                {
 
-                //};
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
 
-                var createdDepartment = _mapper.Map<DepartmentViewModel, CreatedDepartmentDTO>(departmentVM);
+                };
+
                 var result = await  departmentService.CreateDepartmentAsync(createdDepartment);
                 if (result > 0)
                 {

@@ -12,17 +12,33 @@
 				<form asp-action="SignIn" method="post">
 					<div asp-validation-summary="ModelOnly"></div>
 					<input class="text email" asp-for="Email" placeholder="Email" required="">
+					<span asp-validation-for="Email"></span>
 					<input class="text" type="password" asp-for="Password" name="password" placeholder="Password" required="">
+					<span asp-validation-for="Password"></span>
 					<div class="wthree-text">
 						<label class="anim">
-							<input type="checkbox" asp-for="RememberMe" class="checkbox" required="">
-							<span>Remeber Me</span>
+							<div class="d-flex align-items-center">
+								<input type="checkbox" asp-for="RememberMe" class="checkbox" required>
+								<span class="ms-2">Remember Me</span>
+							</div>
+
+
 						</label>
 						<div class="clear"> </div>
 					</div>
 					<input type="submit" value="SIGNIN">
 				</form>
-				<p>Don't have an Account? <a href="#"> Register Now!</a></p>
+				<p class="mb-1">Don't have an Account? <a asp-action="SignUp"> Register Now!</a></p>
+				<p>Forgot Password? <a asp-action="ForgetPassword"> Click Here!</a></p>
+
+				<!--Log in with google -->
+				<div class="mt-3 text-center">
+					<p class=" mb-3">or login with</p>
+						<a asp-action="GoogleLogin" class="" >
+						<img class="ms-auto"  id="google" src="~/google.png"  alt="Login with google" >
+						</a>
+				</div>
+				
 			</div>
 		</div>
 

@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA.BLL.Models.Employees;
+using LinkDev.IKEA.BLL.Services.Departments;
 using LinkDev.IKEA.BLL.Services.Employees;
 using LinkDev.IKEA.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Authorization;
@@ -14,19 +15,10 @@ namespace LinkDev.IKEA.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string Search)
         {
-            // ViewData is a Dictionary Type Property (Introduced in ASP.NET Framework 3.0)
-            // Helps to pass data from Controller [Action] to View
-            ViewData["Message"] = "Hello ViweData";
-
-            // ViewBag is a Dynamic Property (Introduced in ASP.NET Framework 4.0)
-            // Helps to pass data from Controller [Action] to View
-
-            ViewBag.Message = "Hello ViewBag";
-
-
             var employees = await employeeService.GetEmployeesAsync(Search);
             return View(employees);
         }
+
         public async Task<IActionResult> Search(string Search)
         {
             var employees = await employeeService.GetEmployeesAsync(Search);
@@ -127,8 +119,6 @@ namespace LinkDev.IKEA.PL.Controllers
             if (id is null)
                 return BadRequest();
 
-
-
             var employee = await employeeService.GetEmployeeAsync(id.Value);
 
             if (employee is { })
@@ -143,9 +133,8 @@ namespace LinkDev.IKEA.PL.Controllers
                     IsActive = employee.IsActive,
                     HiringDate = employee.HiringDate,
                     EmployeeType = employee.EmployeeType,
-                    Gender = employee.Gender
-                    
-                    
+                    Gender = employee.Gender,
+                    DepartmentId = employee.Department.Id,
                 }
                );
 
