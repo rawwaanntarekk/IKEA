@@ -1,65 +1,167 @@
-IKEA Project
-Overview
-IKEA is a simple ASP.NET Core MVC project that allows authenticated users to perform CRUD operations on departments and employees.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKEA Project README</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
 
-Table of Contents
-Getting Started
-Features
-Authentication
-Department Management
-Employee Management
-Modules
-User Module
-Department Module
-Employee Module
-Technologies Used
-Installation
-Usage
-Contributing
-License
-Getting Started
-Follow these instructions to set up the project locally.
+<h1>IKEA Project</h1>
 
-Features
-Authentication
-User registration and login
-Password hashing and security measures
-Role-based access control
-Department Management
-Create, read, update, and delete (CRUD) operations for departments
-Department listing and detailed views
-Employee Management
-CRUD operations for employees
-Employee listing and detailed views
-Association of employees with departments
-Modules
-User Module
-Handles user authentication and authorization.
+<h2>Overview</h2>
+<p>IKEA is a simple ASP.NET Core MVC project that allows authenticated users to perform CRUD operations on departments and employees.</p>
 
-Features:
-User Registration
-User Login
-Password Encryption
-JWT Token Generation
-Department Module
-Manages department-related operations.
+<h2>Table of Contents</h2>
+<ul>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#features">Features</a>
+        <ul>
+            <li><a href="#authentication">Authentication</a></li>
+            <li><a href="#department-management">Department Management</a></li>
+            <li><a href="#employee-management">Employee Management</a></li>
+        </ul>
+    </li>
+    <li><a href="#modules">Modules</a>
+        <ul>
+            <li><a href="#user-module">User Module</a></li>
+            <li><a href="#department-module">Department Module</a></li>
+            <li><a href="#employee-module">Employee Module</a></li>
+        </ul>
+    </li>
+    <li><a href="#technologies-used">Technologies Used</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+</ul>
 
-Features:
-Add New Department
-View Department Details
-Edit Department Information
-Delete Department
-Employee Module
-Manages employee-related operations.
+<h2 id="getting-started">Getting Started</h2>
+<p>Follow these instructions to set up the project locally.</p>
 
-Features:
-Add New Employee
-View Employee Details
-Edit Employee Information
-Delete Employee
-Assign Employee to Department
-Technologies Used
-ASP.NET Core MVC
-Entity Framework Core
-SQL Server
-Bootstrap
+<h2 id="features">Features</h2>
+
+<h3 id="authentication">Authentication</h3>
+<ul>
+    <li>User registration and login</li>
+    <li>Password hashing and security measures</li>
+    <li>Role-based access control</li>
+</ul>
+
+<h3 id="department-management">Department Management</h3>
+<ul>
+    <li>Create, read, update, and delete (CRUD) operations for departments</li>
+    <li>Department listing and detailed views</li>
+</ul>
+
+<h3 id="employee-management">Employee Management</h3>
+<ul>
+    <li>CRUD operations for employees</li>
+    <li>Employee listing and detailed views</li>
+    <li>Association of employees with departments</li>
+</ul>
+
+<h2 id="modules">Modules</h2>
+
+<h3 id="user-module">User Module</h3>
+<p>Handles user authentication and authorization.</p>
+
+<h4>Features:</h4>
+<ul>
+    <li>User Registration</li>
+    <li>User Login</li>
+    <li>Password Encryption</li>
+    <li>JWT Token Generation</li>
+</ul>
+
+<h3 id="department-module">Department Module</h3>
+<p>Manages department-related operations.</p>
+
+<h4>Features:</h4>
+<ul>
+    <li>Add New Department</li>
+    <li>View Department Details</li>
+    <li>Edit Department Information</li>
+    <li>Delete Department</li>
+</ul>
+
+<h3 id="employee-module">Employee Module</h3>
+<p>Manages employee-related operations.</p>
+
+<h4>Features:</h4>
+<ul>
+    <li>Add New Employee</li>
+    <li>View Employee Details</li>
+    <li>Edit Employee Information</li>
+    <li>Delete Employee</li>
+    <li>Assign Employee to Department</li>
+</ul>
+
+<h2 id="technologies-used">Technologies Used</h2>
+<ul>
+    <li>ASP.NET Core MVC</li>
+    <li>Entity Framework Core</li>
+    <li>SQL Server</li>
+    <li>Bootstrap</li>
+</ul>
+
+<h2 id="installation">Installation</h2>
+<ol>
+    <li>Clone the repository:
+        <pre><code>git clone https://github.com/rawwaanntarekk/IKEA.git</code></pre>
+    </li>
+    <li>Navigate to the project directory:
+        <pre><code>cd IKEA</code></pre>
+    </li>
+    <li>Install the dependencies:
+        <pre><code>dotnet restore</code></pre>
+    </li>
+</ol>
+
+<h2 id="usage">Usage</h2>
+<ol>
+    <li>Update the database connection string in <code>appsettings.json</code>.</li>
+    <li>Run the migrations to create the database:
+        <pre><code>dotnet ef database update</code></pre>
+    </li>
+    <li>Start the application:
+        <pre><code>dotnet run</code></pre>
+    </li>
+</ol>
+
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome! Please read the <code>contributing guidelines</code> before submitting a pull request.</p>
+
+<h2 id="license">License</h2>
+<p>This project is licensed under the MIT License.</p>
+
+</body>
+</html>
