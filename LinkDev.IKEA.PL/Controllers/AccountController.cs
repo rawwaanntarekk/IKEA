@@ -113,9 +113,7 @@ namespace LinkDev.IKEA.PL.Controllers
                 RedirectUri = Url.Action(nameof(GoogleResponse))
             };
 
-            return Challenge(prop, GoogleDefaults.AuthenticationScheme);
-
-            
+            return Challenge(prop, GoogleDefaults.AuthenticationScheme);   
         }
 
 

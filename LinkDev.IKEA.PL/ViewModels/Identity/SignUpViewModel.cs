@@ -13,7 +13,7 @@ namespace LinkDev.IKEA.PL.ViewModels.Identity
         public string Email { get; set; } = null!;
 
         [DataType(DataType.Password)]
-        //[RegularExpression(@"^(?=(.*[a-z]){3,})(?=(.*[A-Z]){2,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$")]
+        [RegularExpression(@"^(?=(.*[a-z]){3,})(?=(.*[A-Z]){2,})(?=(.*[0-9]){2,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{8,}$")]
         public string Password { get; set; } = null!;
         [Display(Name = "Confirm Password")]
         [DataType(DataType.Password)]

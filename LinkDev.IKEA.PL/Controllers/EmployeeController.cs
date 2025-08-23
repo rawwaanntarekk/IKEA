@@ -259,15 +259,7 @@ namespace LinkDev.IKEA.PL.Controllers
 
             }
 
-            //ModelState.AddModelError(string.Empty, message);
             return RedirectToAction(nameof(Index));
-
-
-
-
-
-
-
 
         }
         #endregion

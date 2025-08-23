@@ -76,18 +76,7 @@ namespace LinkDev.IKEA.PL
             });
 
 
-			builder.Services.AddAuthentication(options =>
-			{
-				// Set the default authentication scheme
-				options.DefaultAuthenticateScheme = "Identity.Application";
-				options.DefaultChallengeScheme = "Identity.Application";
-			})
-            .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-            {
-	            IConfiguration googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
-	            options.ClientId = googleAuthSection["ClientId"]!;
-	            options.ClientSecret = googleAuthSection["ClientSecret"]!;
-            });
+			
 
 
 			builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
